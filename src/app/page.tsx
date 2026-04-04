@@ -14,7 +14,7 @@ const posts: Post[] = [
 
 export default function Home() {
   return (
-  <div className="p-4 border rounded mb-4 bg-white text-black">
+  <div className="max-w-xl mx-auto p-4">
     {posts.map((post) => (
       <PostCard key={post.id} post={post} />
     ))}
