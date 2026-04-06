@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import type { FormEvent } from "react"
 import type { ReviewTarget } from "@/types/post"
 
 export default function NewPostPage() {
@@ -12,7 +11,7 @@ export default function NewPostPage() {
   const [comment, setComment] = useState("")
   const [review, setReview] = useState("")
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const postData = {
@@ -24,7 +23,17 @@ export default function NewPostPage() {
       review,
     }
 
-    console.log(postData)
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData)
+    })
+
+    const data = await res.json()
+
+    console.log(data)
   }
 
   return (
