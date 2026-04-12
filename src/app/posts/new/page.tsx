@@ -1,18 +1,24 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import type { ReviewTarget } from "@/types/post"
 
 export default function NewPostPage() {
+  const router = useRouter()
+
   const [title, setTitle] = useState("")
   const [imageUrl, setImageUrl] = useState("")
   const [rating, setRating] = useState<number>(1)
   const [reviewTarget, setReviewTarget] = useState<ReviewTarget>("MANGA")
   const [comment, setComment] = useState("")
   const [review, setReview] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    setLoading(true)
 
     const postData = {
       title,
@@ -31,9 +37,16 @@ export default function NewPostPage() {
       body: JSON.stringify(postData)
     })
 
-    const data = await res.json()
+    if(!res.ok) {
+      alert("投稿に失敗しました")
+      return
+    }
 
+    const data = await res.json()
     console.log(data)
+
+    setLoading(false)
+    router.push("/")
   }
 
   return (
@@ -158,9 +171,10 @@ export default function NewPostPage() {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full bg-orange-500 text-white py-2 rounded mt-6"
             >
-              投稿する
+              {loading ? "投稿中..." : "投稿する"}
             </button>
           </form>
         </div>
