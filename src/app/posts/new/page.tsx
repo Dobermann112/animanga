@@ -7,7 +7,7 @@ export default function NewPostPage() {
   const [title, setTitle] = useState("")
   const [imageUrl, setImageUrl] = useState("")
   const [rating, setRating] = useState<number>(1)
-  const [reviewTarget, setReviewTarget] = useState<ReviewTarget>("manga")
+  const [reviewTarget, setReviewTarget] = useState<ReviewTarget>("MANGA")
   const [comment, setComment] = useState("")
   const [review, setReview] = useState("")
 
@@ -94,9 +94,9 @@ export default function NewPostPage() {
               <div className="flex gap-2 mt-2 text-black">
                 <button
                   type="button"
-                  onClick={() => setReviewTarget("manga")}
+                  onClick={() => setReviewTarget("MANGA")}
                   className={
-                    reviewTarget === "manga"
+                    reviewTarget === "MANGA"
                       ? "bg-orange-500 text-white px-3 py-1 rounded"
                       : "border px-3 py-1 rounded"
                   }
@@ -105,9 +105,9 @@ export default function NewPostPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setReviewTarget("anime")}
+                  onClick={() => setReviewTarget("ANIME")}
                   className={
-                    reviewTarget === "anime"
+                    reviewTarget === "ANIME"
                       ? "bg-orange-500 text-white px-3 py-1 rounded"
                       : "border px-3 py-1 rounded"
                   }
@@ -116,9 +116,9 @@ export default function NewPostPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setReviewTarget("both")}
+                  onClick={() => setReviewTarget("BOTH")}
                   className={
-                    reviewTarget === "both"
+                    reviewTarget === "BOTH"
                       ? "bg-orange-500 text-white px-3 py-1 rounded"
                       : "border px-3 py-1 rounded"
                   }
