@@ -1,4 +1,4 @@
-export type ReviewTarget = "manga" | "anime" | "both"
+export type ReviewTarget = "MANGA" | "ANIME" | "BOTH"
 
 export type Post = {
   id: string

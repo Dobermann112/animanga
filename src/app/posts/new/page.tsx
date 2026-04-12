@@ -1,18 +1,24 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import type { ReviewTarget } from "@/types/post"
 
 export default function NewPostPage() {
+  const router = useRouter()
+
   const [title, setTitle] = useState("")
   const [imageUrl, setImageUrl] = useState("")
   const [rating, setRating] = useState<number>(1)
-  const [reviewTarget, setReviewTarget] = useState<ReviewTarget>("manga")
+  const [reviewTarget, setReviewTarget] = useState<ReviewTarget>("MANGA")
   const [comment, setComment] = useState("")
   const [review, setReview] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    setLoading(true)
 
     const postData = {
       title,
@@ -31,9 +37,16 @@ export default function NewPostPage() {
       body: JSON.stringify(postData)
     })
 
-    const data = await res.json()
+    if(!res.ok) {
+      alert("投稿に失敗しました")
+      return
+    }
 
+    const data = await res.json()
     console.log(data)
+
+    setLoading(false)
+    router.push("/")
   }
 
   return (
@@ -94,9 +107,9 @@ export default function NewPostPage() {
               <div className="flex gap-2 mt-2 text-black">
                 <button
                   type="button"
-                  onClick={() => setReviewTarget("manga")}
+                  onClick={() => setReviewTarget("MANGA")}
                   className={
-                    reviewTarget === "manga"
+                    reviewTarget === "MANGA"
                       ? "bg-orange-500 text-white px-3 py-1 rounded"
                       : "border px-3 py-1 rounded"
                   }
@@ -105,9 +118,9 @@ export default function NewPostPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setReviewTarget("anime")}
+                  onClick={() => setReviewTarget("ANIME")}
                   className={
-                    reviewTarget === "anime"
+                    reviewTarget === "ANIME"
                       ? "bg-orange-500 text-white px-3 py-1 rounded"
                       : "border px-3 py-1 rounded"
                   }
@@ -116,9 +129,9 @@ export default function NewPostPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setReviewTarget("both")}
+                  onClick={() => setReviewTarget("BOTH")}
                   className={
-                    reviewTarget === "both"
+                    reviewTarget === "BOTH"
                       ? "bg-orange-500 text-white px-3 py-1 rounded"
                       : "border px-3 py-1 rounded"
                   }
@@ -158,9 +171,10 @@ export default function NewPostPage() {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full bg-orange-500 text-white py-2 rounded mt-6"
             >
-              投稿する
+              {loading ? "投稿中..." : "投稿する"}
             </button>
           </form>
         </div>

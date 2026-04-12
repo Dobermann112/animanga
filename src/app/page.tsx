@@ -8,7 +8,7 @@ const posts: Post[] = [
     image_url: "https://via.placeholder.com/400x200",
     comment: "作画とストーリーが神",
     rating: 5,
-    review_target: "anime",
+    review_target: "ANIME",
   },
   {
     id: "2",
@@ -16,7 +16,7 @@ const posts: Post[] = [
     image_url: "https://via.placeholder.com/400x200",
     comment: "演出が最高",
     rating: 4,
-    review_target: "both",
+    review_target: "BOTH",
   },
   {
     id: "3",
@@ -24,7 +24,7 @@ const posts: Post[] = [
     image_url: "https://via.placeholder.com/400x200",
     comment: "長いけど面白い",
     rating: 5,
-    review_target: "manga",
+    review_target: "MANGA",
   },
 ]
 
