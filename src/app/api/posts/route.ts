@@ -53,7 +53,21 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  const posts = await prisma.post.findMany()
+  try {
+    const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    })
 
-  return NextResponse.json({ posts })
+    return NextResponse.json({ posts }, { status: 200 })
+
+  } catch (error) {
+    console.error("GET ERROR:", error)
+
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    )
+  }
 }
