@@ -51,3 +51,9 @@ export async function POST(request: Request) {
     )
   }
 }
+
+export async function GET() {
+  const posts = await prisma.post.findMany()
+
+  return NextResponse.json({ posts })
+}
