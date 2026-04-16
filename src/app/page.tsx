@@ -1,40 +1,28 @@
 import PostCard from "@/components/PostCard"
 import type { Post } from "@/types/post"
 
-const posts: Post[] = [
-  {
-    id: "1",
-    title: "進撃の巨人",
-    image_url: "https://via.placeholder.com/400x200",
-    comment: "作画とストーリーが神",
-    rating: 5,
-    review_target: "ANIME",
-  },
-  {
-    id: "2",
-    title: "鬼滅の刃",
-    image_url: "https://via.placeholder.com/400x200",
-    comment: "演出が最高",
-    rating: 4,
-    review_target: "BOTH",
-  },
-  {
-    id: "3",
-    title: "ワンピース",
-    image_url: "https://via.placeholder.com/400x200",
-    comment: "長いけど面白い",
-    rating: 5,
-    review_target: "MANGA",
-  },
-]
+export default async function Home() {
+  const res = await fetch("http://localhost:3001/api/posts", {
+    cache: "no-store", // 毎回最新データ取得（重要）
+  })
 
-export default function Home() {
+  if (!res.ok) {
+    throw new Error("投稿の取得に失敗しました")
+  }
+
+  const data = await res.json()
+  const posts: Post[] = data.posts
+
   return (
     <div className="min-h-screen bg-gray-100 py-6">
       <div className="max-w-xl mx-auto px-4">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+        {posts.length === 0 ? (
+          <p className="text-center text-gray-500">投稿がまだありません</p>
+        ) : (
+          posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))
+        )}
       </div>
     </div>
   )
