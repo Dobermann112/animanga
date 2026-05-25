@@ -1,8 +1,9 @@
+import Link from "next/link"
 import PostCard from "@/components/PostCard"
 import type { Post } from "@/types/post"
 
 export default async function Home() {
-  const res = await fetch("http://localhost:3001/api/posts", {
+  const res = await fetch("http://localhost:3000/api/posts", {
     cache: "no-store", // 毎回最新データ取得（重要）
   })
 
@@ -20,7 +21,9 @@ export default async function Home() {
           <p className="text-center text-gray-500">投稿がまだありません</p>
         ) : (
           posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <Link href={`posts/${post.id}`} key={post.id} >
+              <PostCard key={post.id} post={post} />
+            </Link>
           ))
         )}
       </div>
