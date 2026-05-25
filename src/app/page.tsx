@@ -1,3 +1,4 @@
+import Link from "next/link"
 import PostCard from "@/components/PostCard"
 import type { Post } from "@/types/post"
 
@@ -20,7 +21,9 @@ export default async function Home() {
           <p className="text-center text-gray-500">投稿がまだありません</p>
         ) : (
           posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <Link href={`post/${post.id}`} key={post.id} >
+              <PostCard key={post.id} post={post} />
+            </Link>
           ))
         )}
       </div>
