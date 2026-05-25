@@ -6,14 +6,14 @@ type Props = {
 
 export default function PostCard({ post }: Props) {
   const renderTags = () => {
-    if (post.review_target === "anime") {
+    if (post.reviewTarget === "ANIME") {
       return (
         <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
           アニメ
         </span>
       )
     }
-    if (post.review_target === "manga") {
+    if (post.reviewTarget === "MANGA") {
       return (
         <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
           漫画
@@ -38,9 +38,9 @@ export default function PostCard({ post }: Props) {
       <div>{renderTags()}</div>
 
       {/* 画像 */}
-      {post.image_url && (
+      {post.imageUrl && (
         <img
-          src={post.image_url}
+          src={post.imageUrl}
           alt={post.title}
           className="w-full h-48 object-cover rounded mt-3"
         />
