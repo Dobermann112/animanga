@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { notFound } from "next/navigation"
+import Link from "next/link"
 
 const prisma = new PrismaClient()
 
@@ -96,6 +97,12 @@ export default async function PostDetailPage({ params }: Props) {
           <p className="text-sm text-gray-400 mt-4">
             投稿日: {post.createdAt.toLocaleDateString("ja-JP")}
           </p>
+          <Link
+            href={`/posts/${post.id}/edit`}
+            className="inline-block mt-4 text-sm text-blue-500"
+          >
+            編集する
+          </Link>
         </article>
       </div>
     </div>
