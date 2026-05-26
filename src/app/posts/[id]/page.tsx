@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 
 const prisma = new PrismaClient()
 
@@ -59,9 +60,11 @@ export default async function PostDetailPage({ params }: Props) {
 
           {/* 画像 */}
           {post.imageUrl && (
-            <img
+            <Image
               src={post.imageUrl}
               alt={post.title}
+              width={800}
+              height={400}
               className="w-full h-48 object-cover rounded mt-3"
             />
           )}
@@ -97,12 +100,15 @@ export default async function PostDetailPage({ params }: Props) {
           <p className="text-sm text-gray-400 mt-4">
             投稿日: {post.createdAt.toLocaleDateString("ja-JP")}
           </p>
-          <Link
-            href={`/posts/${post.id}/edit`}
-            className="inline-block mt-4 text-sm text-blue-500"
-          >
-            編集する
-          </Link>
+
+          <div className="flex justify-end mt-4">
+            <Link
+              href={`/posts/${post.id}/edit`}
+              className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-4 mt-1 py-1 rounded transition"
+            >
+              編集する
+            </Link>
+          </div>
         </article>
       </div>
     </div>
