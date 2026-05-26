@@ -1,4 +1,5 @@
 import type { Post } from "@/types/post"
+import Image from "next/image"
 
 type Props = {
   post: Post
@@ -39,9 +40,11 @@ export default function PostCard({ post }: Props) {
 
       {/* 画像 */}
       {post.imageUrl && (
-        <img
+        <Image
           src={post.imageUrl}
           alt={post.title}
+          width={800}
+          height={400}
           className="w-full h-48 object-cover rounded mt-3"
         />
       )}
