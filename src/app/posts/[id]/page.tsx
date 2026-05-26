@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { notFound } from "next/navigation"
+import DeletePostButton from "./DeletePostButton"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -101,13 +102,14 @@ export default async function PostDetailPage({ params }: Props) {
             投稿日: {post.createdAt.toLocaleDateString("ja-JP")}
           </p>
 
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-between mt-4">
             <Link
               href={`/posts/${post.id}/edit`}
-              className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-4 mt-1 py-1 rounded transition"
+              className="inline-block bg-green-600 hover:bg-green-700 text-white px-4 mt-1 py-1 rounded transition"
             >
               編集する
             </Link>
+            <DeletePostButton postId={post.id} />
           </div>
         </article>
       </div>

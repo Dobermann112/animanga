@@ -47,9 +47,6 @@ export default function EditPostForm({ post }: Props) {
       return
     }
 
-    const data = await res.json()
-    console.log(data)
-
     setLoading(false)
     router.push(`/posts/${post.id}`)
   }
