@@ -17,6 +17,16 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gray-100 py-6">
       <div className="max-w-xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-orange-500">
+            AniManga
+          </h1>
+
+          <p className="text-gray-600 mt-2">
+            アニメ・漫画レビューサービス
+          </p>
+        </div>
+
         {posts.length === 0 ? (
           <p className="text-center text-gray-500">投稿がまだありません</p>
         ) : (
