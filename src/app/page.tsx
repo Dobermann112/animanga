@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Header from "@/components/Header"
 import PostCard from "@/components/PostCard"
+import NewPostPage from "@/components/NewPostButton"
 import type { Post } from "@/types/post"
 
 export default async function Home() {
@@ -30,6 +31,9 @@ export default async function Home() {
             </Link>
           ))
         )}
+
+        <NewPostPage />
+
       </div>
     </div>
   )

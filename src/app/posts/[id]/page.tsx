@@ -4,6 +4,7 @@ import Header from "@/components/Header"
 import DeletePostButton from "./DeletePostButton"
 import Link from "next/link"
 import Image from "next/image"
+import NewPostButton from "@/components/NewPostButton"
 
 const prisma = new PrismaClient()
 
@@ -116,6 +117,9 @@ export default async function PostDetailPage({ params }: Props) {
             <DeletePostButton postId={post.id} />
           </div>
         </article>
+
+        <NewPostButton />
+
       </div>
     </div>
   )
