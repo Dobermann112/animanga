@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { notFound } from "next/navigation"
+import Header from "@/components/Header"
 import DeletePostButton from "./DeletePostButton"
 import Link from "next/link"
 import Image from "next/image"
@@ -55,6 +56,9 @@ export default async function PostDetailPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-gray-100 py-6">
       <div className="max-w-xl mx-auto px-4">
+
+        <Header />
+
         <article className="bg-white p-4 rounded-lg border border-gray-300 shadow-sm">
           {/* タグ */}
           <div>{renderTags()}</div>

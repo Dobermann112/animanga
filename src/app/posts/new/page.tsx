@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import type { ReviewTarget } from "@/types/post"
+import Header from "@/components/Header"
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -52,6 +53,9 @@ export default function NewPostPage() {
   return (
     <div className="min-h-screen bg-gray-100 py-6">
       <div className="max-w-xl mx-auto px-4">
+
+        <Header />
+
         <div className="bg-white p-6 rounded-lg border border-gray-300 shadow-sm">
           <h1 className="text-xl font-bold text-gray-800">投稿作成</h1>
 
