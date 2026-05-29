@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import type { ReviewTarget } from "@/types/post"
+import type { ReviewTarget } from "@prisma/client"
 import Header from "@/components/Header"
 
 export default function NewPostPage() {
@@ -42,9 +42,6 @@ export default function NewPostPage() {
       alert("投稿に失敗しました")
       return
     }
-
-    const data = await res.json()
-    console.log(data)
 
     setLoading(false)
     router.push("/")

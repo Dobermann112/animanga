@@ -1,13 +1,9 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
-
-const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-
-    console.log("BODY:", body)
 
     const { title, imageUrl, comment, review, rating, reviewTarget } = body
 

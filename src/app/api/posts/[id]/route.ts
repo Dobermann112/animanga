@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
-
-const prisma = new PrismaClient()
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -79,7 +77,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return NextResponse.json({ id }, { status: 200 })
 
   } catch (error) {
-    console.log("ERROR", error)
+    console.error("ERROR", error)
 
     return NextResponse.json(
       { error: "Internal Server Error" },

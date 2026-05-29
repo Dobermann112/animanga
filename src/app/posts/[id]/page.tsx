@@ -1,12 +1,11 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Header from "@/components/Header"
+import ReviewTargetTag from "@/components/ReviewTargetTag"
 import DeletePostButton from "./DeletePostButton"
 import Link from "next/link"
 import Image from "next/image"
 import NewPostButton from "@/components/NewPostButton"
-
-const prisma = new PrismaClient()
 
 type Props = {
   params: Promise<{
@@ -27,33 +26,6 @@ export default async function PostDetailPage({ params }: Props) {
     notFound()
   }
 
-  const renderTags = () => {
-    if (post.reviewTarget === "ANIME") {
-      return (
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
-          アニメ
-        </span>
-      )
-    }
-    if (post.reviewTarget === "MANGA") {
-      return (
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
-          漫画
-        </span>
-      )
-    }
-    return (
-      <>
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
-          漫画
-        </span>
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded">
-          アニメ
-        </span>
-      </>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-gray-100 py-6">
       <div className="max-w-xl mx-auto px-4">
@@ -62,7 +34,7 @@ export default async function PostDetailPage({ params }: Props) {
 
         <article className="bg-white p-4 rounded-lg border border-gray-300 shadow-sm">
           {/* タグ */}
-          <div>{renderTags()}</div>
+          <div><ReviewTargetTag reviewTarget={post.reviewTarget} /></div>
 
           {/* 画像 */}
           {post.imageUrl && (
