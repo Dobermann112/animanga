@@ -1,4 +1,4 @@
-export type ReviewTarget = "MANGA" | "ANIME" | "BOTH"
+import type { ReviewTarget } from "@prisma/client"
 
 export type Post = {
   id: number
