@@ -1,4 +1,5 @@
 import type { Post } from "@/types/post"
+import ReviewTargetTag from "./ReviewTargetTag"
 import Image from "next/image"
 
 type Props = {
@@ -6,37 +7,10 @@ type Props = {
 }
 
 export default function PostCard({ post }: Props) {
-  const renderTags = () => {
-    if (post.reviewTarget === "ANIME") {
-      return (
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
-          アニメ
-        </span>
-      )
-    }
-    if (post.reviewTarget === "MANGA") {
-      return (
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
-          漫画
-        </span>
-      )
-    }
-    return (
-      <>
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded mr-2">
-          漫画
-        </span>
-        <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded">
-          アニメ
-        </span>
-      </>
-    )
-  }
-
   return (
     <div className="bg-white p-4 rounded-lg border border-gray-300 mb-4 shadow-sm">
       {/* タグ */}
-      <div>{renderTags()}</div>
+      <div><ReviewTargetTag reviewTarget={post.reviewTarget} /></div>
 
       {/* 画像 */}
       {post.imageUrl && (
