@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Header from "@/components/Header"
 import EditPostForm from "./EditPostForm"
-
-const prisma = new PrismaClient()
 
 type Props = {
   params: Promise<{

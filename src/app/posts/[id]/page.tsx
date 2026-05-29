@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Header from "@/components/Header"
 import DeletePostButton from "./DeletePostButton"
 import Link from "next/link"
 import Image from "next/image"
 import NewPostButton from "@/components/NewPostButton"
-
-const prisma = new PrismaClient()
 
 type Props = {
   params: Promise<{
