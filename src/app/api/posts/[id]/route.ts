@@ -77,7 +77,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return NextResponse.json({ id }, { status: 200 })
 
   } catch (error) {
-    console.log("ERROR", error)
+    console.error("ERROR", error)
 
     return NextResponse.json(
       { error: "Internal Server Error" },

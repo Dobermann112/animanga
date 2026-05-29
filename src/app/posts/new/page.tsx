@@ -43,9 +43,6 @@ export default function NewPostPage() {
       return
     }
 
-    const data = await res.json()
-    console.log(data)
-
     setLoading(false)
     router.push("/")
   }
