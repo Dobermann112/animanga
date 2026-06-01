@@ -6,6 +6,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,11 +24,19 @@ export default function RegisterPage() {
     })
 
     const data = await res.json()
-    console.log(data)
+
+    if (!res.ok) {
+      setError(data.error)
+      return
+    }
+
+    setError("")
+    alert("ユーザー登録が完了しました")
   }
 
   return (
     <div>
+      {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="name" value={name} onChange={(e) => setName(e.target.value)} />
         <input type="text" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
