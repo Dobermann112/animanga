@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 
@@ -6,6 +8,15 @@ export async function POST(request: Request) {
     const body = await request.json()
 
     const { title, imageUrl, comment, review, rating, reviewTarget } = body
+
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 },
+      )
+    }
 
     // バリデーション
     if (!title || !comment || !reviewTarget) {
@@ -31,7 +42,7 @@ export async function POST(request: Request) {
         review,
         rating,
         reviewTarget,
-        userId: 1, // MVPのため固定
+        userId: Number(session.user.id),
       },
     })
 
