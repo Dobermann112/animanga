@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import Header from "@/components/Header"
 import EditPostForm from "./EditPostForm"
 
 type Props = {
@@ -23,13 +22,8 @@ export default async function EditPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6">
-      <div className="max-w-xl mx-auto px-4">
-
-        <Header />
-
-        <EditPostForm post={post} />
-      </div>
-    </div>
+    <>
+      <EditPostForm post={post} />
+    </>
   )
 }
