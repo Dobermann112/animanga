@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
+import LogoutButton from "./LogoutButton"
 
 export default async function Header() {
   const session = await getServerSession(authOptions)
@@ -24,9 +25,9 @@ export default async function Header() {
               <span className="text-gray-700">
                 {session.user.name} さん
               </span>
-              <Link href="/logout" className="text-orange-500 font-bold">
-                ログアウト
-              </Link>
+
+              <LogoutButton />
+
             </>
           ) : (
             <>
