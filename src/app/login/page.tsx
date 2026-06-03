@@ -28,6 +28,7 @@ export default function LoginPage() {
 
     setError("")
     router.push("/")
+    router.refresh()
   }
   return (
     <div className="bg-white p-6 rounded-lg border border-gray-300 shadow-sm">
