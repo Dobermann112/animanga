@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/auth"
+import { error } from "console"
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -10,6 +13,33 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json(
         { error: "Invalid post Id" },
         { status: 400 }
+      )
+    }
+
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    const existingPost = await prisma.post.findUnique({
+      where: { id: postId },
+    })
+
+    if (!existingPost) {
+      return NextResponse.json(
+        { error: "Post not found" },
+        { status: 401 }
+      )
+    }
+
+    if (existingPost.userId !== Number(session.user.id)) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 }
       )
     }
 
@@ -67,6 +97,33 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
       return NextResponse.json(
         { error: "Invalid post Id" },
         { status: 400 }
+      )
+    }
+
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    const existingPost = await prisma.post.findUnique({
+      where: { id: postId },
+    })
+
+    if (!existingPost) {
+      return NextResponse.json(
+        { error: "Post not found" },
+        { status: 401 }
+      )
+    }
+
+    if (existingPost.userId !== Number(session.user.id)) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 }
       )
     }
 
