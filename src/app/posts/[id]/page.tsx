@@ -29,6 +29,8 @@ export default async function PostDetailPage({ params }: Props) {
     notFound()
   }
 
+  const isOwner = session?.user?.id && post.userId === Number(session.user.id)
+
   return (
     <>
       <article className="bg-white p-4 rounded-lg border border-gray-300 shadow-sm">
@@ -78,15 +80,17 @@ export default async function PostDetailPage({ params }: Props) {
           投稿日: {post.createdAt.toLocaleDateString("ja-JP")}
         </p>
 
-        <div className="flex justify-between mt-4">
-          <Link
-            href={`/posts/${post.id}/edit`}
-            className="inline-block bg-green-600 hover:bg-green-700 text-white px-4 mt-1 py-1 rounded transition"
-          >
-            編集する
-          </Link>
-          <DeletePostButton postId={post.id} />
-        </div>
+        { isOwner && (
+          <div className="flex justify-between mt-4">
+            <Link
+              href={`/posts/${post.id}/edit`}
+              className="inline-block bg-green-600 hover:bg-green-700 text-white px-4 mt-1 py-1 rounded transition"
+            >
+              編集する
+            </Link>
+            <DeletePostButton postId={post.id} />
+          </div>
+        )}
       </article>
 
       <NewPostButton isLoggedIn={!!session?.user} />
