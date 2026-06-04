@@ -115,7 +115,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     if (!existingPost) {
       return NextResponse.json(
         { error: "Post not found" },
-        { status: 401 }
+        { status: 404 }
       )
     }
 
