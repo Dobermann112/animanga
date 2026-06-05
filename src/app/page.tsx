@@ -1,33 +1,39 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
-import Link from "next/link"
 import PostCard from "@/components/PostCard"
 import NewPostButton from "@/components/NewPostButton"
-import type { Post } from "@/types/post"
+import { prisma } from "@/lib/prisma"
+import { PostWithLikeCount } from "@/types/post"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
-  const res = await fetch("http://localhost:3000/api/posts", {
-    cache: "no-store", // 毎回最新データ取得（重要）
+  const userId = session?.user?.id ? Number(session.user.id) : -1
+
+  const posts: PostWithLikeCount[] = await prisma.post.findMany({
+    include: {
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
+      likes: {
+        where: {
+          userId,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
   })
-
-  if (!res.ok) {
-    throw new Error("投稿の取得に失敗しました")
-  }
-
-  const data = await res.json()
-  const posts: Post[] = data.posts
-
   return (
     <>
       {posts.length === 0 ? (
         <p className="text-center text-gray-500">投稿がまだありません</p>
       ) : (
         posts.map((post) => (
-          <Link href={`posts/${post.id}`} key={post.id} >
-            <PostCard key={post.id} post={post} />
-          </Link>
+          <PostCard key={post.id} post={post} />
         ))
       )}
 

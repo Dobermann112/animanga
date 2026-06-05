@@ -12,3 +12,14 @@ export type Post = {
   createdAt: Date
   updatedAt: Date
 }
+
+export type PostWithLikeCount = Post & {
+  _count: {
+    likes: number
+  }
+  likes: {
+    id: number
+    userId: number
+    postId: number
+  }[]
+}

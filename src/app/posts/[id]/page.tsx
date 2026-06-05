@@ -7,6 +7,7 @@ import DeletePostButton from "./DeletePostButton"
 import Link from "next/link"
 import Image from "next/image"
 import NewPostButton from "@/components/NewPostButton"
+import LikeButton from "@/components/LikeButton"
 
 type Props = {
   params: Promise<{
@@ -19,9 +20,23 @@ export default async function PostDetailPage({ params }: Props) {
 
   const { id } = await params
 
+  const userId = session?.user?.id ? Number(session.user.id) : -1
+
   const post = await prisma.post.findUnique({
     where: {
       id: Number(id),
+    },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
+      likes: {
+        where: {
+          userId
+        },
+      },
     },
   })
 
@@ -30,6 +45,8 @@ export default async function PostDetailPage({ params }: Props) {
   }
 
   const isOwner = session?.user?.id && post.userId === Number(session.user.id)
+
+  const isLiked = post.likes.length > 0
 
   return (
     <>
@@ -57,6 +74,8 @@ export default async function PostDetailPage({ params }: Props) {
         <p className="text-orange-500 mt-1">
           {"★".repeat(post.rating)}
         </p>
+
+        <LikeButton postId={post.id} initialLiked={isLiked} initialLikeCount={post._count.likes} />
 
         {/* コメント */}
         <p className="mt-2 text-gray-600">

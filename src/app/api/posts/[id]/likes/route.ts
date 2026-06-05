@@ -3,8 +3,8 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  try {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try{
     const { id } = await params
     const postId = Number(id)
 
@@ -25,60 +25,42 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     }
 
     const existingPost = await prisma.post.findUnique({
-      where: { id: postId },
+      where: { id: postId }
     })
 
     if (!existingPost) {
       return NextResponse.json(
         { error: "Post not found" },
-        { status: 401 }
+        { status: 404 }
       )
     }
 
-    if (existingPost.userId !== Number(session.user.id)) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      )
-    }
-
-    const body = await request.json()
-
-    const { title, imageUrl, comment, review, rating, reviewTarget } = body
-
-    // バリデーション
-    if (!title || !comment || !reviewTarget) {
-      return NextResponse.json(
-        { error: "title, comment, reviewTarget are required" },
-        { status: 400 }
-      )
-    }
-
-    if (typeof rating !== "number" || rating < 1 || rating > 5) {
-      return NextResponse.json(
-        { error: "rating must be between 1 and 5" },
-        { status: 400 }
-      )
-    }
-
-    // DB更新
-    const post = await prisma.post.update({
-      where: { id: postId },
-      data: {
-        title,
-        imageUrl,
-        comment,
-        review,
-        rating,
-        reviewTarget,
+    const existingLike = await prisma.like.findUnique({
+      where: {
+        userId_postId: {
+          userId: Number(session.user.id),
+          postId,
+        },
       },
     })
 
-    // 成功レスポンス
-    return NextResponse.json({ post }, { status: 200 })
+    if (existingLike) {
+      return NextResponse.json(
+        { error: "Already liked" },
+        { status: 409 }
+      )
+    }
 
+    const like = await prisma.like.create({
+      data: {
+        userId: Number(session.user.id),
+        postId,
+      },
+    })
+
+    return NextResponse.json({ like }, { status: 201 })
   } catch (error) {
-    console.error("ERROR", error)
+    console.error("Error", error)
 
     return NextResponse.json(
       { error: "Internal Server Error" },
@@ -108,32 +90,34 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
       )
     }
 
-    const existingPost = await prisma.post.findUnique({
-      where: { id: postId },
+    const existingLike = await prisma.like.findUnique({
+      where: {
+        userId_postId: {
+          userId: Number(session.user.id),
+          postId,
+        },
+      },
     })
 
-    if (!existingPost) {
+    if (!existingLike) {
       return NextResponse.json(
-        { error: "Post not found" },
+        { error: "Like not found" },
         { status: 404 }
       )
     }
 
-    if (existingPost.userId !== Number(session.user.id)) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      )
-    }
-
-    await prisma.post.delete({
-      where: { id: postId }
+    await prisma.like.delete({
+      where: {
+        userId_postId: {
+          userId: Number(session.user.id),
+          postId,
+        },
+      },
     })
 
-    return NextResponse.json({ id }, { status: 200 })
-
+    return NextResponse.json({ id: existingLike.id }, { status: 200 })
   } catch (error) {
-    console.error("ERROR", error)
+    console.error("Error", error)
 
     return NextResponse.json(
       { error: "Internal Server Error" },
