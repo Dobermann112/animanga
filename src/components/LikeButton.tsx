@@ -18,25 +18,34 @@ export default function LikeButton({
 
   const [isLiked, setIsLiked] = useState(initialLiked)
   const [likeCount, setLikeCount] = useState(initialLikeCount)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleClick = async () => {
-    const res = await fetch(`/api/posts/${postId}/likes`, {
-      method: isLiked ? "DELETE" : "POST",
-    })
+    if (isLoading) return
 
-    if (!res.ok) {
-      return
+    setIsLoading(true)
+
+    try {
+      const res = await fetch(`/api/posts/${postId}/likes`, {
+        method: isLiked ? "DELETE" : "POST",
+      })
+
+      if (!res.ok) {
+        return
+      }
+
+      if (isLiked) {
+        setIsLiked(false)
+        setLikeCount((prev) => prev - 1)
+      } else {
+        setIsLiked(true)
+        setLikeCount((prev) => prev + 1)
+      }
+
+      router.refresh()
+    } finally {
+      setIsLoading(false)
     }
-
-    if (isLiked) {
-      setIsLiked(false)
-      setLikeCount((prev) => prev - 1)
-    } else {
-      setIsLiked(true)
-      setLikeCount((prev) => prev + 1)
-    }
-
-    router.refresh()
   }
 
   return (
