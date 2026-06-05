@@ -61,11 +61,20 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions)
+
+    const userId = session?.user?.id ? Number(session.user.id) : -1
+
     const posts = await prisma.post.findMany({
       include: {
         _count: {
           select: {
             likes: true,
+          },
+        },
+        likes: {
+          where: {
+            userId,
           },
         },
       },
