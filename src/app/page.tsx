@@ -3,7 +3,7 @@ import { authOptions } from "@/auth"
 import Link from "next/link"
 import PostCard from "@/components/PostCard"
 import NewPostButton from "@/components/NewPostButton"
-import type { Post } from "@/types/post"
+import type { PostWithLikeCount } from "@/types/post"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -17,7 +17,7 @@ export default async function Home() {
   }
 
   const data = await res.json()
-  const posts: Post[] = data.posts
+  const posts: PostWithLikeCount[] = data.posts
 
   return (
     <>

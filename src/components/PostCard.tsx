@@ -1,9 +1,9 @@
-import type { Post } from "@/types/post"
+import type { PostWithLikeCount } from "@/types/post"
 import ReviewTargetTag from "./ReviewTargetTag"
 import Image from "next/image"
 
 type Props = {
-  post: Post
+  post: PostWithLikeCount
 }
 
 export default function PostCard({ post }: Props) {
@@ -36,6 +36,10 @@ export default function PostCard({ post }: Props) {
       {/* コメント */}
       <p className="mt-2 text-gray-600">
         {post.comment}
+      </p>
+
+      <p className="mt-2 text-sm text-gray-500">
+        ❤️ {post._count.likes}
       </p>
     </div>
   )

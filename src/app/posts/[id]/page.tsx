@@ -23,6 +23,13 @@ export default async function PostDetailPage({ params }: Props) {
     where: {
       id: Number(id),
     },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
+    },
   })
 
   if (!post) {
@@ -74,6 +81,10 @@ export default async function PostDetailPage({ params }: Props) {
             {post.review || "レビューはありません。"}
           </p>
         </div>
+
+        <p className="mt-2 text-sm text-gray-500">
+          ❤️ {post._count.likes}
+        </p>
 
         {/* 投稿日 */}
         <p className="text-sm text-gray-400 mt-4">
