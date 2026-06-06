@@ -3,21 +3,27 @@ import { authOptions } from "@/auth"
 import PostCard from "@/components/PostCard"
 import NewPostButton from "@/components/NewPostButton"
 import { prisma } from "@/lib/prisma"
-import { PostWithLikeCount } from "@/types/post"
+import { PostWithCounts } from "@/types/post"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
   const userId = session?.user?.id ? Number(session.user.id) : -1
 
-  const posts: PostWithLikeCount[] = await prisma.post.findMany({
+  const posts: PostWithCounts[] = await prisma.post.findMany({
     include: {
       _count: {
         select: {
           likes: true,
+          bookmarks: true,
         },
       },
       likes: {
+        where: {
+          userId,
+        },
+      },
+      bookmarks: {
         where: {
           userId,
         },

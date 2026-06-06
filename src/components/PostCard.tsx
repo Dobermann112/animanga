@@ -1,15 +1,17 @@
-import type { PostWithLikeCount } from "@/types/post"
+import type { PostWithCounts } from "@/types/post"
 import ReviewTargetTag from "./ReviewTargetTag"
 import Image from "next/image"
 import LikeButton from "./LikeButton"
 import Link from "next/link"
+import BookmarkButton from "./BookmarkButton"
 
 type Props = {
-  post: PostWithLikeCount
+  post: PostWithCounts
 }
 
 export default function PostCard({ post }: Props) {
   const isLiked = post.likes.length > 0
+  const isBookmarked = post.bookmarks.length > 0
 
   return (
     <div className="bg-white p-4 rounded-lg border border-gray-300 mb-4 shadow-sm">
@@ -44,7 +46,10 @@ export default function PostCard({ post }: Props) {
         </p>
       </Link>
 
-      <LikeButton postId={post.id} initialLiked={isLiked} initialLikeCount={post._count.likes} />
+      <div className="flex items-center gap-4">
+        <LikeButton postId={post.id} initialLiked={isLiked} initialLikeCount={post._count.likes} />
+        <BookmarkButton postId={post.id} initialBookmarked={isBookmarked} initialBookmarkCount={post._count.bookmarks} />
+      </div>
     </div>
   )
 }
