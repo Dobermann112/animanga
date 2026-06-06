@@ -8,6 +8,7 @@ import Link from "next/link"
 import Image from "next/image"
 import NewPostButton from "@/components/NewPostButton"
 import LikeButton from "@/components/LikeButton"
+import BookmarkButton from "@/components/BookmarkButton"
 
 type Props = {
   params: Promise<{
@@ -20,19 +21,31 @@ export default async function PostDetailPage({ params }: Props) {
 
   const { id } = await params
 
+  const postId = Number(id)
+
+  if (Number.isNaN(postId)) {
+    notFound()
+  }
+
   const userId = session?.user?.id ? Number(session.user.id) : -1
 
   const post = await prisma.post.findUnique({
     where: {
-      id: Number(id),
+      id: postId,
     },
     include: {
       _count: {
         select: {
           likes: true,
+          bookmarks: true,
         },
       },
       likes: {
+        where: {
+          userId
+        },
+      },
+      bookmarks: {
         where: {
           userId
         },
@@ -47,6 +60,7 @@ export default async function PostDetailPage({ params }: Props) {
   const isOwner = session?.user?.id && post.userId === Number(session.user.id)
 
   const isLiked = post.likes.length > 0
+  const isBookmarked = post.bookmarks.length > 0
 
   return (
     <>
@@ -75,7 +89,10 @@ export default async function PostDetailPage({ params }: Props) {
           {"★".repeat(post.rating)}
         </p>
 
-        <LikeButton postId={post.id} initialLiked={isLiked} initialLikeCount={post._count.likes} />
+        <div className="flex items-center gap-4">
+          <LikeButton postId={post.id} initialLiked={isLiked} initialLikeCount={post._count.likes} />
+          <BookmarkButton postId={post.id} initialBookmarked={isBookmarked} initialBookmarkCount={post._count.bookmarks} />
+        </div>
 
         {/* コメント */}
         <p className="mt-2 text-gray-600">

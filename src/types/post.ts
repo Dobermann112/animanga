@@ -13,11 +13,17 @@ export type Post = {
   updatedAt: Date
 }
 
-export type PostWithLikeCount = Post & {
+export type PostWithCounts = Post & {
   _count: {
     likes: number
+    bookmarks: number
   }
   likes: {
+    id: number
+    userId: number
+    postId: number
+  }[]
+  bookmarks: {
     id: number
     userId: number
     postId: number
