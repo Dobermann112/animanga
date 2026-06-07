@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
 import PostCard from "@/components/PostCard"
 import NewPostButton from "@/components/NewPostButton"
+import PostListControls from "@/components/PostListControls"
 import { prisma } from "@/lib/prisma"
 import { PostWithCounts } from "@/types/post"
 
@@ -62,6 +63,8 @@ export default async function Home({ searchParams }: Props) {
   })
   return (
     <>
+      <PostListControls currentSort={sort} currentFilter={filter} />
+
       {posts.length === 0 ? (
         <p className="text-center text-gray-500">投稿がまだありません</p>
       ) : (
