@@ -23,6 +23,10 @@ export default async function Home({ searchParams }: Props) {
   const isSavedFilter = filter === "saved"
   const isPopularSort = sort === "popular"
 
+  const emptyMessage = isSavedFilter
+  ? "保存済みの投稿がまだありません"
+  : "投稿がまだありません"
+
   const posts: PostWithCounts[] = await prisma.post.findMany({
     where: isSavedFilter
       ? {
@@ -66,7 +70,7 @@ export default async function Home({ searchParams }: Props) {
       <PostListControls currentSort={sort} currentFilter={filter} />
 
       {posts.length === 0 ? (
-        <p className="text-center text-gray-500">投稿がまだありません</p>
+        <p className="text-center text-gray-500">{emptyMessage}</p>
       ) : (
         posts.map((post) => (
           <PostCard key={post.id} post={post} />

@@ -20,14 +20,14 @@ export default function PostListControls({ currentSort, currentFilter }: Props) 
         href="/"
         className={`${baseClass} ${isLatest ? activeClass : inactiveClass}`}
       >
-        新着
+        新着順
       </Link>
 
       <Link
         href="/?sort=popular"
         className={`${baseClass} ${isPopular ? activeClass : inactiveClass}`}
       >
-        人気
+        人気順
       </Link>
 
       <Link
