@@ -5,38 +5,52 @@ import NewPostButton from "@/components/NewPostButton"
 import PostListControls from "@/components/PostListControls"
 import { prisma } from "@/lib/prisma"
 import { PostWithCounts } from "@/types/post"
+import { ReviewTarget } from "@prisma/client"
 
 type Props = {
   searchParams: Promise<{
     sort?: string
     filter?: string
+    target?: string
   }>
 }
 
 export default async function Home({ searchParams }: Props) {
   const session = await getServerSession(authOptions)
 
-  const { sort, filter } = await searchParams
+  const { sort, filter, target } = await searchParams
 
   const userId = session?.user?.id ? Number(session.user.id) : -1
 
   const isSavedFilter = filter === "saved"
   const isPopularSort = sort === "popular"
+  const selectedTarget =
+    target === ReviewTarget.MANGA || target === ReviewTarget.ANIME
+      ? target
+      : undefined
 
   const emptyMessage = isSavedFilter
   ? "保存済みの投稿がまだありません"
   : "投稿がまだありません"
 
-  const posts: PostWithCounts[] = await prisma.post.findMany({
-    where: isSavedFilter
-      ? {
-        bookmarks: {
-          some: {
-            userId,
-          },
+  const where = {
+    ...(isSavedFilter && {
+      bookmarks: {
+        some: {
+          userId,
         },
-      }
-      : undefined,
+      },
+    }),
+    ...(selectedTarget && {
+      ReviewTarget: selectedTarget,
+    }),
+  }
+
+  const posts: PostWithCounts[] = await prisma.post.findMany({
+
+
+
+    where,
     include: {
       _count: {
         select: {
