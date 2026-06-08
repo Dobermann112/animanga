@@ -7,12 +7,12 @@ type Props = {
 }
 
 export default function TargetFilter({ currentTarget, currentSort, currentFilter }: Props) {
-  const baseClass = "px-4 py-2 rounded-full text-sm font-bold transition"
+  const baseClass = "px-3 py-1 rounded-full text-xs font-medium transition"
   const activeClass = "bg-gray-800 text-white"
-  const inactiveClass = "bg-gray-100 text-gray-600 hover:bg-gray-200"
+  const inactiveClass = "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
 
   return (
-    <>
+    <div className="flex items-center gap-2">
       <Link
         href={
           currentSort === "popular"
@@ -51,6 +51,6 @@ export default function TargetFilter({ currentTarget, currentSort, currentFilter
       >
         アニメ
       </Link>
-    </>
+    </div>
   )
 }

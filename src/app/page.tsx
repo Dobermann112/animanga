@@ -86,7 +86,7 @@ export default async function Home({ searchParams }: Props) {
   })
   return (
     <>
-      <div className="flex justify-between gap-2 mb-4">
+      <div className="flex items-center justify-between mb-4">
         <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} />
         <PostListControls currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
       </div>
