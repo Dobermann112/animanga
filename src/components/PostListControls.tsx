@@ -3,9 +3,10 @@ import Link from "next/link"
 type Props = {
   currentSort?: string
   currentFilter?: string
+  currentTarget?: string
 }
 
-export default function PostListControls({ currentSort, currentFilter }: Props) {
+export default function PostListControls({ currentSort, currentFilter, currentTarget }: Props) {
   const isLatest = !currentSort && !currentFilter
   const isPopular = currentSort === "popular"
   const isSaved = currentFilter === "saved"
@@ -15,27 +16,27 @@ export default function PostListControls({ currentSort, currentFilter }: Props) 
   const inactiveClass = "bg-gray-100 text-gray-600 hover:bg-gray-200"
 
   return (
-    <div className="flex justify-end gap-2 mb-4">
+    <>
       <Link
-        href="/"
+        href={currentTarget ? `/?target=${currentTarget}` : "/"}
         className={`${baseClass} ${isLatest ? activeClass : inactiveClass}`}
       >
         新着順
       </Link>
 
       <Link
-        href="/?sort=popular"
+        href={currentTarget ? `/?sort=popular&target=${currentTarget}` : "/?sort=popular"}
         className={`${baseClass} ${isPopular ? activeClass : inactiveClass}`}
       >
         人気順
       </Link>
 
       <Link
-        href="/?filter=saved"
+        href={currentTarget ? `/?filter=saved&target=${currentTarget}` : "/?filter=saved"}
         className={`${baseClass} ${isSaved ? activeClass : inactiveClass}`}
       >
         保存済み
       </Link>
-    </div>
+    </>
   )
 }
