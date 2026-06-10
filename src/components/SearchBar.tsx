@@ -5,23 +5,46 @@ import { useState } from "react"
 
 type Props = {
   currentQuery?: string
+  currentSort?: string
+  currentFilter?: string
+  currentTarget?: string
 }
 
-export default function SearchBar({ currentQuery }: Props) {
+export default function SearchBar({
+  currentQuery,
+  currentSort,
+  currentFilter,
+  currentTarget,
+}: Props) {
   const router = useRouter()
   const [keyword, setKeyword] = useState(currentQuery ?? "")
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const trimmedKeyword = keyword.trim()
+    const params = new URLSearchParams()
 
-    if (!trimmedKeyword) {
-      router.push("/")
-      return
+    if (currentSort) {
+      params.set("sort", currentSort)
     }
 
-    router.push(`/?q=${encodeURIComponent(trimmedKeyword)}`)
+    if (currentFilter) {
+      params.set("filter", currentFilter)
+    }
+
+    if (currentTarget) {
+      params.set("target", currentTarget)
+    }
+
+    const trimmedKeyword = keyword.trim()
+
+    if (trimmedKeyword) {
+      params.set("q", trimmedKeyword)
+    }
+
+    const queryString = params.toString()
+
+    router.push(queryString ? `/?${queryString}` : "/")
   }
 
   return (

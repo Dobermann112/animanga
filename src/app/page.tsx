@@ -95,7 +95,7 @@ export default async function Home({ searchParams }: Props) {
   })
   return (
     <>
-      <SearchBar currentQuery={q} />
+      <SearchBar currentQuery={q} currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
 
       <div className="flex items-center justify-between mb-4">
         <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} />
