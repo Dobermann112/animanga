@@ -98,8 +98,8 @@ export default async function Home({ searchParams }: Props) {
       <SearchBar currentQuery={q} currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
 
       <div className="flex items-center justify-between mb-4">
-        <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} />
-        <PostListControls currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
+        <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} currentQuery={q} />
+        <PostListControls currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} currentQuery={q} />
       </div>
 
       {posts.length === 0 ? (
