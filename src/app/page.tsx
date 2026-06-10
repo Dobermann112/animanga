@@ -5,38 +5,66 @@ import NewPostButton from "@/components/NewPostButton"
 import PostListControls from "@/components/PostListControls"
 import { prisma } from "@/lib/prisma"
 import { PostWithCounts } from "@/types/post"
+import { ReviewTarget } from "@prisma/client"
+import TargetFilter from "@/components/TargetFilter"
+import SearchBar from "@/components/SearchBar"
 
 type Props = {
   searchParams: Promise<{
     sort?: string
     filter?: string
+    target?: string
+    q?: string
   }>
 }
 
 export default async function Home({ searchParams }: Props) {
   const session = await getServerSession(authOptions)
 
-  const { sort, filter } = await searchParams
+  const { sort, filter, target, q } = await searchParams
 
   const userId = session?.user?.id ? Number(session.user.id) : -1
 
   const isSavedFilter = filter === "saved"
   const isPopularSort = sort === "popular"
+  const selectedTarget: ReviewTarget | undefined =
+    target === ReviewTarget.MANGA
+      ? ReviewTarget.MANGA
+      : target === ReviewTarget.ANIME
+        ? ReviewTarget.ANIME
+        : undefined
+
+  const keyword = q?.trim() || undefined
 
   const emptyMessage = isSavedFilter
   ? "保存済みの投稿がまだありません"
   : "投稿がまだありません"
 
-  const posts: PostWithCounts[] = await prisma.post.findMany({
-    where: isSavedFilter
-      ? {
-        bookmarks: {
-          some: {
-            userId,
-          },
+  const where = {
+    ...(isSavedFilter && {
+      bookmarks: {
+        some: {
+          userId,
         },
-      }
-      : undefined,
+      },
+    }),
+    ...(selectedTarget && {
+      reviewTarget: {
+        in:
+          selectedTarget === ReviewTarget.MANGA
+            ? [ReviewTarget.MANGA, ReviewTarget.BOTH]
+            : [ReviewTarget.ANIME, ReviewTarget.BOTH],
+      },
+    }),
+    ...(keyword && {
+      title: {
+        contains: keyword,
+      },
+    }),
+  }
+
+  const posts: PostWithCounts[] = await prisma.post.findMany({
+    where,
     include: {
       _count: {
         select: {
@@ -67,7 +95,12 @@ export default async function Home({ searchParams }: Props) {
   })
   return (
     <>
-      <PostListControls currentSort={sort} currentFilter={filter} />
+      <SearchBar currentQuery={q} currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
+
+      <div className="flex items-center justify-between mb-4">
+        <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} currentQuery={q} />
+        <PostListControls currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} currentQuery={q} />
+      </div>
 
       {posts.length === 0 ? (
         <p className="text-center text-gray-500">{emptyMessage}</p>
