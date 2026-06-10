@@ -7,19 +7,21 @@ import { prisma } from "@/lib/prisma"
 import { PostWithCounts } from "@/types/post"
 import { ReviewTarget } from "@prisma/client"
 import TargetFilter from "@/components/TargetFilter"
+import SearchBar from "@/components/SearchBar"
 
 type Props = {
   searchParams: Promise<{
     sort?: string
     filter?: string
     target?: string
+    q?: string
   }>
 }
 
 export default async function Home({ searchParams }: Props) {
   const session = await getServerSession(authOptions)
 
-  const { sort, filter, target } = await searchParams
+  const { sort, filter, target, q } = await searchParams
 
   const userId = session?.user?.id ? Number(session.user.id) : -1
 
@@ -31,6 +33,8 @@ export default async function Home({ searchParams }: Props) {
       : target === ReviewTarget.ANIME
         ? ReviewTarget.ANIME
         : undefined
+
+  const keyword = q?.trim() || undefined
 
   const emptyMessage = isSavedFilter
   ? "保存済みの投稿がまだありません"
@@ -50,6 +54,11 @@ export default async function Home({ searchParams }: Props) {
           selectedTarget === ReviewTarget.MANGA
             ? [ReviewTarget.MANGA, ReviewTarget.BOTH]
             : [ReviewTarget.ANIME, ReviewTarget.BOTH],
+      },
+    }),
+    ...(keyword && {
+      title: {
+        contains: keyword,
       },
     }),
   }
@@ -86,6 +95,8 @@ export default async function Home({ searchParams }: Props) {
   })
   return (
     <>
+      <SearchBar currentQuery={q} />
+
       <div className="flex items-center justify-between mb-4">
         <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} />
         <PostListControls currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
