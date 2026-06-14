@@ -17,6 +17,15 @@ export default async function MyPage() {
     where: {
       id: userId,
     },
+    include: {
+      _count: {
+        select: {
+          posts: true,
+          likes: true,
+          bookmarks: true,
+        },
+      },
+    },
   })
 
   if (!user) {
@@ -24,12 +33,18 @@ export default async function MyPage() {
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
+    <main className="mx-auto text-black max-w-4xl px-4 py-8">
       <h1 className="text-2xl font-bold">マイページ</h1>
 
       <div className="mt-6 rounded-lg border p-4">
         <p className="font-semibold">{user.name}</p>
         <p className="text-sm text-gray-500">{user.email}</p>
+      </div>
+
+      <div className="mt-4 flex gap-6 text-sm">
+        <p>投稿 {user._count.posts}</p>
+        <p>いいね {user._count.likes}</p>
+        <p>保存 {user._count.bookmarks}</p>
       </div>
     </main>
   )
