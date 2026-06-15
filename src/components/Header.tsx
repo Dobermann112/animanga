@@ -22,9 +22,19 @@ export default async function Header() {
         <div className="flex gap-3 text-sm">
           {session?.user ? (
             <>
-              <span className="text-gray-700">
-                {session.user.name} さん
-              </span>
+              <Link
+                href="/mypage"
+                className="flex items-center gap-2 rounded-full px-3 py-2 hover:bg-gray-100 transition"
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-sm font-bold text-white">
+                  {session.user.name?.slice(0, 1)}
+                </div>
+
+                <span className="font-medium text-black
+                ">
+                  {session.user.name}
+                </span>
+              </Link>
 
               <LogoutButton />
 
