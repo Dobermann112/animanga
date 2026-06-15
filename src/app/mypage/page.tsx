@@ -92,13 +92,25 @@ export default async function MyPage({ searchParams }: MyPageProps) {
   })
 
   return (
-    <main className="mx-auto text-black max-w-4xl px-4 py-8">
-      <h1 className="text-2xl font-bold">マイページ</h1>
+    <main className="mx-auto max-w-4xl px-4 py-2 text-black">
+      <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <p className="text-sm font-medium text-gray-500">My Page</p>
 
-      <div className="mt-6 rounded-lg border p-4">
-        <p className="font-semibold">{user.name}</p>
-        <p className="text-sm text-gray-500">{user.email}</p>
-      </div>
+        <div className="mt-4 flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-900 text-xl font-bold text-white">
+            {user.name.slice(0, 1)}
+          </div>
+
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {user.name}
+            </h1>
+            <p className="mt-1 text-sm text-gray-500">
+              {user.email}
+            </p>
+          </div>
+        </div>
+      </section>
 
       <div className="mt-4 flex gap-3 text-sm">
         <Link
