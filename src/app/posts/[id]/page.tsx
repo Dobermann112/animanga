@@ -9,6 +9,7 @@ import Image from "next/image"
 import NewPostButton from "@/components/NewPostButton"
 import LikeButton from "@/components/LikeButton"
 import BookmarkButton from "@/components/BookmarkButton"
+import CommentForm from "@/components/CommentForm"
 
 type Props = {
   params: Promise<{
@@ -147,6 +148,14 @@ export default async function PostDetailPage({ params }: Props) {
           <h2 className="text-xl font-bold text-gray-900">
             コメント
           </h2>
+
+          {session?.user ? (
+            <CommentForm postId={post.id} />
+          ) : (
+            <p className="mt-4 text-sm text-gray-500">
+              コメントするにはログインが必要です。
+            </p>
+          )}
 
           {post.comments.length === 0 ? (
             <p className="mt-4 text-sm text-gray-500">
