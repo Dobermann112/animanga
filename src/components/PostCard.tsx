@@ -49,6 +49,10 @@ export default function PostCard({ post }: Props) {
       <div className="flex items-center gap-4">
         <LikeButton postId={post.id} initialLiked={isLiked} initialLikeCount={post._count.likes} />
         <BookmarkButton postId={post.id} initialBookmarked={isBookmarked} initialBookmarkCount={post._count.bookmarks} />
+
+        <span className="text-sm text-gray-500">
+          コメント {post._count.comments}
+        </span>
       </div>
     </div>
   )

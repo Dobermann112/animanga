@@ -17,6 +17,7 @@ export type PostWithCounts = Post & {
   _count: {
     likes: number
     bookmarks: number
+    comments: number
   }
   likes: {
     id: number
