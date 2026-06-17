@@ -4,6 +4,7 @@ import Image from "next/image"
 import LikeButton from "./LikeButton"
 import Link from "next/link"
 import BookmarkButton from "./BookmarkButton"
+import { MessageCircle } from "lucide-react"
 
 type Props = {
   post: PostWithCounts
@@ -46,12 +47,13 @@ export default function PostCard({ post }: Props) {
         </p>
       </Link>
 
-      <div className="flex items-center gap-4">
+      <div className="mt-3 flex items-center gap-3">
         <LikeButton postId={post.id} initialLiked={isLiked} initialLikeCount={post._count.likes} />
         <BookmarkButton postId={post.id} initialBookmarked={isBookmarked} initialBookmarkCount={post._count.bookmarks} />
 
-        <span className="text-sm text-gray-500">
-          コメント {post._count.comments}
+        <span className="inline-flex items-center gap-1 text-sm text-gray-600">
+          <MessageCircle size={18} />
+          <span className="leading-none">{post._count.comments}</span>
         </span>
       </div>
     </div>
