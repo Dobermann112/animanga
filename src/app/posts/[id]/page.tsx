@@ -10,6 +10,7 @@ import NewPostButton from "@/components/NewPostButton"
 import LikeButton from "@/components/LikeButton"
 import BookmarkButton from "@/components/BookmarkButton"
 import CommentForm from "@/components/CommentForm"
+import CommentDeleteButton from "@/components/CommentDeleteButton"
 
 type Props = {
   params: Promise<{
@@ -168,13 +169,23 @@ export default async function PostDetailPage({ params }: Props) {
                   key={comment.id}
                   className="rounded-xl border border-gray-100 bg-gray-50 p-4"
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-gray-900">
-                      {comment.user.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {comment.createdAt.toLocaleDateString("ja-JP")}
-                    </p>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {comment.user.name}
+                      </p>
+
+                      <p className="text-xs text-gray-500">
+                        {comment.createdAt.toLocaleDateString("ja-JP")}
+                      </p>
+                    </div>
+
+                    {comment.userId === Number(session?.user?.id) && (
+                      <CommentDeleteButton
+                        postId={post.id}
+                        commentId={comment.id}
+                      />
+                    )}
                   </div>
 
                   <p className="mt-3 text-sm leading-relaxed text-gray-700">
