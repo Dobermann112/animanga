@@ -70,6 +70,7 @@ export default async function Home({ searchParams }: Props) {
         select: {
           likes: true,
           bookmarks: true,
+          comments: true,
         },
       },
       likes: {

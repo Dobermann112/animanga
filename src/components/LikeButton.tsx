@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Heart } from "lucide-react"
 
 type Props = {
   postId: number
@@ -52,9 +53,16 @@ export default function LikeButton({
     <button
       type="button"
       onClick={handleClick}
-      className="mt-2 text-sm text-gray-500"
+      disabled={isLoading}
+      className={`inline-flex items-center gap-1 text-sm transition disabled:opacity-50 ${
+        isLiked ? "text-red-500" : "text-gray-600"
+      }`}
     >
-      {isLiked ? "❤️" : "🤍"} {likeCount}
+      <Heart
+        size={18}
+        fill={isLiked ? "currentColor" : "none"}
+      />
+      <span className="leading-none">{likeCount}</span>
     </button>
   )
 }

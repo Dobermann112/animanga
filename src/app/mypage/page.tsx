@@ -73,6 +73,7 @@ export default async function MyPage({ searchParams }: MyPageProps) {
         select: {
           likes: true,
           bookmarks: true,
+          comments: true,
         },
       },
       likes: {

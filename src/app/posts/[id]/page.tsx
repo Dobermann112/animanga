@@ -9,6 +9,8 @@ import Image from "next/image"
 import NewPostButton from "@/components/NewPostButton"
 import LikeButton from "@/components/LikeButton"
 import BookmarkButton from "@/components/BookmarkButton"
+import CommentForm from "@/components/CommentForm"
+import CommentDeleteButton from "@/components/CommentDeleteButton"
 
 type Props = {
   params: Promise<{
@@ -38,6 +40,7 @@ export default async function PostDetailPage({ params }: Props) {
         select: {
           likes: true,
           bookmarks: true,
+          comments: true,
         },
       },
       likes: {
@@ -48,6 +51,19 @@ export default async function PostDetailPage({ params }: Props) {
       bookmarks: {
         where: {
           userId
+        },
+      },
+      comments: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       },
     },
@@ -128,6 +144,58 @@ export default async function PostDetailPage({ params }: Props) {
           </div>
         )}
       </article>
+
+      <section className="mt-10 rounded-2xl border border-gray-200 bg-white p-6">
+          <h2 className="text-xl font-bold text-gray-900">
+            コメント
+          </h2>
+
+          {session?.user ? (
+            <CommentForm postId={post.id} />
+          ) : (
+            <p className="mt-4 text-sm text-gray-500">
+              コメントするにはログインが必要です。
+            </p>
+          )}
+
+          {post.comments.length === 0 ? (
+            <p className="mt-4 text-sm text-gray-500">
+              まだコメントがありません。
+            </p>
+          ) : (
+            <div className="mt-6 space-y-4">
+              {post.comments.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="rounded-xl border border-gray-100 bg-gray-50 p-4"
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {comment.user.name}
+                      </p>
+
+                      <p className="text-xs text-gray-500">
+                        {comment.createdAt.toLocaleDateString("ja-JP")}
+                      </p>
+                    </div>
+
+                    {comment.userId === Number(session?.user?.id) && (
+                      <CommentDeleteButton
+                        postId={post.id}
+                        commentId={comment.id}
+                      />
+                    )}
+                  </div>
+
+                  <p className="mt-3 text-sm leading-relaxed text-gray-700">
+                    {comment.content}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
 
       <NewPostButton isLoggedIn={!!session?.user} />
     </>

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Bookmark } from "lucide-react"
 
 type Props = {
   postId: number
@@ -52,9 +53,16 @@ export default function BookmarkButton({
     <button
       type="button"
       onClick={handleClick}
-      className="mt-2 text-sm text-yellow-500"
+      disabled={isLoading}
+      className={`inline-flex items-center gap-1 text-sm transition disabled:opacity-50 ${
+        isBookmarked ? "text-yellow-500" : "text-gray-600"
+      }`}
     >
-      {isBookmarked ? "⭐️" : "⭐︎"} {bookmarkCount}
+      <Bookmark
+        size={18}
+        fill={isBookmarked ? "currentColor" : "none"}
+      />
+      <span className="leading-none">{bookmarkCount}</span>
     </button>
   )
 }
