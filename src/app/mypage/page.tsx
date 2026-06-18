@@ -3,13 +3,17 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
+import Pagination from "@/components/Pagination"
 import PostCard from "@/components/PostCard"
 
 type MyPageProps = {
   searchParams: Promise<{
     tab?: string
+    page?: string
   }>
 }
+
+const PAGE_SIZE = 6
 
 export default async function MyPage({ searchParams }: MyPageProps) {
   const session = await getServerSession(authOptions)
@@ -25,6 +29,10 @@ export default async function MyPage({ searchParams }: MyPageProps) {
     params.tab === "liked" || params.tab === "saved" || params.tab === "posts"
       ? params.tab
       : "posts"
+
+  const pageParam = Number(params.page ?? "1")
+  const currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam
+  const skip = (currentPage - 1) * PAGE_SIZE
 
   const user = await prisma.user.findUnique({
     where: {
@@ -66,6 +74,12 @@ export default async function MyPage({ searchParams }: MyPageProps) {
             userId,
           }
 
+  const totalCount = await prisma.post.count({
+    where: postWhere,
+  })
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE)
+
   const posts = await prisma.post.findMany({
     where: postWhere,
     include: {
@@ -90,6 +104,8 @@ export default async function MyPage({ searchParams }: MyPageProps) {
     orderBy: {
       createdAt: "desc"
     },
+    skip,
+    take: PAGE_SIZE,
   })
 
   return (
@@ -163,6 +179,15 @@ export default async function MyPage({ searchParams }: MyPageProps) {
           </div>
         )}
       </div>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath="/mypage"
+        />
+      )}
+
     </main>
   )
 }

@@ -10,12 +10,7 @@ type Props = {
   currentTarget?: string
 }
 
-export default function SearchBar({
-  currentQuery,
-  currentSort,
-  currentFilter,
-  currentTarget,
-}: Props) {
+export default function SearchBar({ currentQuery, currentSort, currentFilter, currentTarget }: Props) {
   const router = useRouter()
   const [keyword, setKeyword] = useState(currentQuery ?? "")
 

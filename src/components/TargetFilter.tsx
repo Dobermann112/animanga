@@ -2,12 +2,11 @@ import Link from "next/link"
 
 type Props = {
   currentTarget?: string
-  currentSort? : string
-  currentFilter? : string
-  currentQuery? :string
+  currentSort?: string
+  currentFilter?: string
 }
 
-export default function TargetFilter({ currentTarget, currentSort, currentFilter, currentQuery }: Props) {
+export default function TargetFilter({ currentTarget, currentSort, currentFilter }: Props) {
   const baseClass = "px-3 py-1 rounded-full text-xs font-medium transition"
   const activeClass = "bg-gray-800 text-white"
   const inactiveClass = "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
@@ -25,10 +24,6 @@ export default function TargetFilter({ currentTarget, currentSort, currentFilter
 
     if (target) {
       params.set("target", target)
-    }
-
-    if (currentQuery) {
-      params.set("q", currentQuery)
     }
 
     const queryString = params.toString()

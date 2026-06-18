@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
+import Pagination from "@/components/Pagination"
 import PostCard from "@/components/PostCard"
 import NewPostButton from "@/components/NewPostButton"
 import PostListControls from "@/components/PostListControls"
@@ -15,13 +16,20 @@ type Props = {
     filter?: string
     target?: string
     q?: string
+    page?: string
   }>
 }
+
+const PAGE_SIZE = 6
 
 export default async function Home({ searchParams }: Props) {
   const session = await getServerSession(authOptions)
 
-  const { sort, filter, target, q } = await searchParams
+  const { sort, filter, target, q, page } = await searchParams
+
+  const pageParam = Number(page ?? "1")
+  const currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam
+  const skip = (currentPage - 1) * PAGE_SIZE
 
   const userId = session?.user?.id ? Number(session.user.id) : -1
 
@@ -63,6 +71,12 @@ export default async function Home({ searchParams }: Props) {
     }),
   }
 
+  const totalCount = await prisma.post.count({
+    where,
+  })
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE)
+
   const posts: PostWithCounts[] = await prisma.post.findMany({
     where,
     include: {
@@ -93,22 +107,30 @@ export default async function Home({ searchParams }: Props) {
       : {
           createdAt: "desc",
         },
+    skip,
+    take: PAGE_SIZE,
   })
   return (
     <>
-      <SearchBar currentQuery={q} currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
+      <SearchBar key={q ?? ""} currentQuery={q} currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
 
       <div className="flex items-center justify-between mb-4">
-        <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} currentQuery={q} />
-        <PostListControls currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} currentQuery={q} />
+        <TargetFilter currentTarget={selectedTarget} currentSort={sort} currentFilter={filter} />
+        <PostListControls currentSort={sort} currentFilter={filter} currentTarget={selectedTarget} />
       </div>
 
       {posts.length === 0 ? (
         <p className="text-center text-gray-500">{emptyMessage}</p>
       ) : (
-        posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
 
       <NewPostButton isLoggedIn={!!session?.user} />
