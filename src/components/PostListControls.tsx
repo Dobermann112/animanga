@@ -4,10 +4,9 @@ type Props = {
   currentSort?: string
   currentFilter?: string
   currentTarget?: string
-  currentQuery?: string
 }
 
-export default function PostListControls({ currentSort, currentFilter, currentTarget, currentQuery }: Props) {
+export default function PostListControls({ currentSort, currentFilter, currentTarget }: Props) {
   const isLatest = !currentSort && !currentFilter
   const isPopular = currentSort === "popular"
   const isSaved = currentFilter === "saved"
@@ -29,10 +28,6 @@ export default function PostListControls({ currentSort, currentFilter, currentTa
 
     if (currentTarget) {
       params.set("target", currentTarget)
-    }
-
-    if (currentQuery) {
-      params.set("q", currentQuery)
     }
 
     const queryString = params.toString()
