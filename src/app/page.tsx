@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
+import Pagination from "@/components/Pagination"
 import PostCard from "@/components/PostCard"
 import NewPostButton from "@/components/NewPostButton"
 import PostListControls from "@/components/PostListControls"
@@ -70,6 +71,12 @@ export default async function Home({ searchParams }: Props) {
     }),
   }
 
+  const totalCount = await prisma.post.count({
+    where,
+  })
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE)
+
   const posts: PostWithCounts[] = await prisma.post.findMany({
     where,
     include: {
@@ -115,9 +122,15 @@ export default async function Home({ searchParams }: Props) {
       {posts.length === 0 ? (
         <p className="text-center text-gray-500">{emptyMessage}</p>
       ) : (
-        posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
 
       <NewPostButton isLoggedIn={!!session?.user} />

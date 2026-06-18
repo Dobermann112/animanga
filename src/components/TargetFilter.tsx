@@ -2,9 +2,9 @@ import Link from "next/link"
 
 type Props = {
   currentTarget?: string
-  currentSort? : string
-  currentFilter? : string
-  currentQuery? :string
+  currentSort?: string
+  currentFilter?: string
+  currentQuery?: string
 }
 
 export default function TargetFilter({ currentTarget, currentSort, currentFilter, currentQuery }: Props) {
