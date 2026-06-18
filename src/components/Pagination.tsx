@@ -28,21 +28,50 @@ export default function Pagination({
     return `/?${params.toString()}`
   }
 
+  const hasPreviousPage = currentPage > 1
+  const hasNextPage = currentPage < totalPages
+
   return (
-    <div className="flex justify-center gap-2">
+    <div className="mt-8 flex items-center justify-center gap-2">
+      {hasPreviousPage ? (
+        <Link
+          href={createPageHref(currentPage - 1)}
+          className="rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 transition hover:bg-gray-100"
+        >
+          前へ
+        </Link>
+      ) : (
+        <span className="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-300">
+          前へ
+        </span>
+      )}
+
       {pages.map((page) => (
         <Link
           key={page}
           href={createPageHref(page)}
           className={
             page === currentPage
-              ? "rounded-full bg-black px-3 py-1 text-sm text-white"
-              : "rounded-full bg-white px-3 py-1 text-sm text-black"
+              ? "rounded-full bg-gray-900 px-3 py-1 text-sm font-medium text-white"
+              : "rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 transition hover:bg-gray-100"
           }
         >
           {page}
         </Link>
       ))}
+
+      {hasNextPage ? (
+        <Link
+          href={createPageHref(currentPage + 1)}
+          className="rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 transition hover:bg-gray-100"
+        >
+          次へ
+        </Link>
+      ) : (
+        <span className="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-300">
+          次へ
+        </span>
+      )}
     </div>
   )
 }
