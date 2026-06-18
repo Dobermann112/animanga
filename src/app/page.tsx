@@ -15,13 +15,20 @@ type Props = {
     filter?: string
     target?: string
     q?: string
+    page?: string
   }>
 }
+
+const PAGE_SIZE = 6
 
 export default async function Home({ searchParams }: Props) {
   const session = await getServerSession(authOptions)
 
-  const { sort, filter, target, q } = await searchParams
+  const { sort, filter, target, q, page } = await searchParams
+
+  const pageParam = Number(page ?? "1")
+  const currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam
+  const skip = (currentPage - 1) * PAGE_SIZE
 
   const userId = session?.user?.id ? Number(session.user.id) : -1
 
@@ -93,6 +100,8 @@ export default async function Home({ searchParams }: Props) {
       : {
           createdAt: "desc",
         },
+    skip,
+    take: PAGE_SIZE,
   })
   return (
     <>
