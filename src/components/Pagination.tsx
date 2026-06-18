@@ -6,12 +6,10 @@ import { useSearchParams } from "next/navigation"
 type PaginationProps = {
   currentPage: number
   totalPages: number
+  basePath?: string
 }
 
-export default function Pagination({
-  currentPage,
-  totalPages,
-}: PaginationProps) {
+export default function Pagination({ currentPage, totalPages, basePath = "/" }: PaginationProps) {
   const searchParams = useSearchParams()
 
   const pages: number[] = []
@@ -25,7 +23,7 @@ export default function Pagination({
 
     params.set("page", String(page))
 
-    return `/?${params.toString()}`
+    return `${basePath}?${params.toString()}`
   }
 
   const hasPreviousPage = currentPage > 1
