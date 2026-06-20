@@ -11,7 +11,7 @@ export default function NewPostPage() {
   const [imageUrl, setImageUrl] = useState("")
   const [rating, setRating] = useState<number>(1)
   const [reviewTarget, setReviewTarget] = useState<ReviewTarget>("MANGA")
-  const [comment, setComment] = useState("")
+  const [description, setDescription] = useState("")
   const [review, setReview] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -25,7 +25,7 @@ export default function NewPostPage() {
       imageUrl,
       rating,
       reviewTarget,
-      comment,
+      description,
       review,
     }
 
@@ -137,16 +137,16 @@ export default function NewPostPage() {
         </div>
 
         <div className="mt-4">
-          <label htmlFor="comment" className="text-sm text-gray-800">
-            コメント
+          <label htmlFor="description" className="text-sm text-gray-800">
+            概要
           </label>
           <textarea
-            id="comment"
+            id="description"
             rows={3}
-            placeholder="一言コメント"
+            placeholder="作品概要"
             className="w-full border rounded px-3 py-2 mt-1 text-black placeholder:text-gray"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
 

@@ -110,9 +110,9 @@ export default async function PostDetailPage({ params }: Props) {
           <BookmarkButton postId={post.id} initialBookmarked={isBookmarked} initialBookmarkCount={post._count.bookmarks} />
         </div>
 
-        {/* コメント */}
+        {/* 作品概要 */}
         <p className="mt-2 text-gray-600">
-          {post.comment}
+          {post.description}
         </p>
 
         <hr className="my-4 border-gray-200" />

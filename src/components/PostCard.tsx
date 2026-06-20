@@ -41,9 +41,9 @@ export default function PostCard({ post }: Props) {
           {"★".repeat(post.rating)}
         </p>
 
-        {/* コメント */}
+        {/* 作品概要 */}
         <p className="mt-2 text-gray-600">
-          {post.comment}
+          {post.description}
         </p>
       </Link>
 

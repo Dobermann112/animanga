@@ -15,7 +15,7 @@ export default function EditPostForm({ post }: Props) {
   const [imageUrl, setImageUrl] = useState(post.imageUrl ?? "")
   const [rating, setRating] = useState(post.rating)
   const [reviewTarget, setReviewTarget] = useState(post.reviewTarget)
-  const [comment, setComment] = useState(post.comment)
+  const [description, setDescription] = useState(post.description)
   const [review, setReview] = useState(post.review ?? "")
   const [loading, setLoading] = useState(false)
 
@@ -29,7 +29,7 @@ export default function EditPostForm({ post }: Props) {
       imageUrl,
       rating,
       reviewTarget,
-      comment,
+      description,
       review,
     }
 
@@ -118,8 +118,8 @@ export default function EditPostForm({ post }: Props) {
         </div>
 
         <div className="mt-4">
-          <label className="text-sm font-medium text-gray-700">コメント</label>
-          <textarea className="w-full border rounded px-3 py-2 mt-2 text-black placeholder:text-gray-400" placeholder="一言コメント" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
+          <label className="text-sm font-medium text-gray-700">概要</label>
+          <textarea className="w-full border rounded px-3 py-2 mt-2 text-black placeholder:text-gray-400" placeholder="作品概要" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
         </div>
 
         <div className="mt-4">
