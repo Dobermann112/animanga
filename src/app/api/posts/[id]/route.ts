@@ -44,12 +44,12 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     const body = await request.json()
 
-    const { title, imageUrl, comment, review, rating, reviewTarget } = body
+    const { title, imageUrl, description, review, rating, reviewTarget } = body
 
     // バリデーション
-    if (!title || !comment || !reviewTarget) {
+    if (!title || !description || !reviewTarget) {
       return NextResponse.json(
-        { error: "title, comment, reviewTarget are required" },
+        { error: "title, description, reviewTarget are required" },
         { status: 400 }
       )
     }
@@ -67,7 +67,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       data: {
         title,
         imageUrl,
-        comment,
+        description,
         review,
         rating,
         reviewTarget,

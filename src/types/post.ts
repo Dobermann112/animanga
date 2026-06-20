@@ -5,7 +5,7 @@ export type Post = {
   userId: number
   title: string
   imageUrl: string | null
-  comment: string
+  description: string
   review: string | null
   rating: number
   reviewTarget: ReviewTarget
