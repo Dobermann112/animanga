@@ -2,6 +2,20 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import * as bcrypt from "bcrypt"
 
+const createUsername = (name: string) => {
+  const baseUsername = name
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+
+  if (baseUsername) {
+    return `${baseUsername}-${Date.now()}`
+  }
+
+  return `user-${Date.now()}`
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -37,10 +51,12 @@ export async function POST(request: Request) {
 
     const saltRounds = 10
     const hashedPassword = await bcrypt.hash(password, saltRounds)
+    const username = createUsername(name)
 
     const user = await prisma.user.create({
       data: {
         name,
+        username,
         email,
         password: hashedPassword,
       },
@@ -51,6 +67,7 @@ export async function POST(request: Request) {
         user: {
           id: user.id,
           name: user.name,
+          username: user.username,
           email: user.email,
         },
       },
