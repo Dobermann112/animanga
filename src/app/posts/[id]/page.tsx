@@ -11,6 +11,7 @@ import LikeButton from "@/components/LikeButton"
 import BookmarkButton from "@/components/BookmarkButton"
 import CommentForm from "@/components/CommentForm"
 import CommentDeleteButton from "@/components/CommentDeleteButton"
+import { User } from "lucide-react"
 
 type Props = {
   params: Promise<{
@@ -95,8 +96,9 @@ export default async function PostDetailPage({ params }: Props) {
         {post.user.username && (
           <Link
             href={`/users/${post.user.username}`}
-            className="mt-3 inline-block text-sm font-medium text-gray-500 hover:text-gray-900"
+            className="ml-auto inline-flex items-center gap-1 rounded-full bg-gray-100 mt-2 px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 transition"
           >
+            <User size={12} />
             {post.user.name}
           </Link>
         )}
