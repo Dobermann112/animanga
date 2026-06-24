@@ -14,6 +14,11 @@ export type Post = {
 }
 
 export type PostWithCounts = Post & {
+  user: {
+    id: number
+    name: string
+    username: string | null
+  }
   _count: {
     likes: number
     bookmarks: number

@@ -5,6 +5,7 @@ import LikeButton from "./LikeButton"
 import Link from "next/link"
 import BookmarkButton from "./BookmarkButton"
 import { MessageCircle } from "lucide-react"
+import { User } from "lucide-react"
 
 type Props = {
   post: PostWithCounts
@@ -55,6 +56,16 @@ export default function PostCard({ post }: Props) {
           <MessageCircle size={18} />
           <span className="leading-none">{post._count.comments}</span>
         </span>
+        
+        {post.user.username && (
+          <Link
+            href={`/users/${post.user.username}`}
+            className="ml-auto inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 transition"
+          >
+            <User size={12} />
+            {post.user.name}
+          </Link>
+        )}
       </div>
     </div>
   )

@@ -80,6 +80,13 @@ export default async function Home({ searchParams }: Props) {
   const posts: PostWithCounts[] = await prisma.post.findMany({
     where,
     include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        },
+      },
       _count: {
         select: {
           likes: true,
