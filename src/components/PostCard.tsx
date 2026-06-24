@@ -55,6 +55,15 @@ export default function PostCard({ post }: Props) {
           <MessageCircle size={18} />
           <span className="leading-none">{post._count.comments}</span>
         </span>
+        
+        {post.user.username && (
+          <Link
+            href={`/users/${post.user.username}`}
+            className="mt-3 inline-block text-sm font-medium text-gray-500 hover:text-gray-900"
+          >
+            {post.user.name}
+          </Link>
+        )}
       </div>
     </div>
   )

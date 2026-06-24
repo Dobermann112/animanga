@@ -36,6 +36,13 @@ export default async function PostDetailPage({ params }: Props) {
       id: postId,
     },
     include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        },
+      },
       _count: {
         select: {
           likes: true,
@@ -83,6 +90,16 @@ export default async function PostDetailPage({ params }: Props) {
       <article className="bg-white p-4 rounded-lg border border-gray-300 shadow-sm">
         {/* タグ */}
         <div><ReviewTargetTag reviewTarget={post.reviewTarget} /></div>
+
+        {/* 投稿者 */}
+        {post.user.username && (
+          <Link
+            href={`/users/${post.user.username}`}
+            className="mt-3 inline-block text-sm font-medium text-gray-500 hover:text-gray-900"
+          >
+            {post.user.name}
+          </Link>
+        )}
 
         {/* 画像 */}
         {post.imageUrl && (
