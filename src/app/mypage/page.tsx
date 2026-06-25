@@ -129,8 +129,13 @@ export default async function MyPage({ searchParams }: MyPageProps) {
             <h1 className="text-2xl font-bold text-gray-900">
               {user.name}
             </h1>
+
             <p className="mt-1 text-sm text-gray-500">
               {user.email}
+            </p>
+
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
+              {user.bio || "自己紹介はまだ設定されていません。"}
             </p>
           </div>
         </div>
