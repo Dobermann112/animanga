@@ -26,6 +26,14 @@ export default async function EditProfilePage() {
   return (
     <main className="mx-auto max-w-2xl px-4 py-4 text-black">
       <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h1 className="text-2xl font-bold text-gray-900">
+          プロフィール編集
+        </h1>
+
+        <p className="mt-2 text-sm text-gray-500">
+          表示名と自己紹介を編集できます。
+        </p>
+
         <ProfileEditForm
           initialName={user.name}
           initialBio={user.bio}
