@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Pagination from "@/components/Pagination"
 import PostCard from "@/components/PostCard"
+import { Pencil } from "lucide-react"
 
 type MyPageProps = {
   searchParams: Promise<{
@@ -118,7 +119,17 @@ export default async function MyPage({ searchParams }: MyPageProps) {
   return (
     <main className="mx-auto max-w-4xl px-4 py-2 text-black">
       <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-        <p className="text-sm font-medium text-gray-500">My Page</p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-gray-500">My Page</p>
+
+          <Link
+            href="/mypage/edit"
+            className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-gray-900"
+          >
+            <Pencil size={14} />
+            編集
+          </Link>
+        </div>
 
         <div className="mt-4 flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-900 text-xl font-bold text-white">
@@ -129,8 +140,13 @@ export default async function MyPage({ searchParams }: MyPageProps) {
             <h1 className="text-2xl font-bold text-gray-900">
               {user.name}
             </h1>
+
             <p className="mt-1 text-sm text-gray-500">
               {user.email}
+            </p>
+
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
+              {user.bio || "自己紹介はまだ設定されていません。"}
             </p>
           </div>
         </div>

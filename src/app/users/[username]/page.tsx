@@ -105,6 +105,12 @@ export default async function UserDetailPage({ params, searchParams }: Props) {
             <p className="mt-1 text-sm text-gray-500">
               投稿 {user._count.posts}
             </p>
+
+            {user.bio && (
+              <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
+                {user.bio}
+              </p>
+            )}
           </div>
         </div>
       </section>

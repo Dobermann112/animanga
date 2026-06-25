@@ -2,9 +2,21 @@ import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
 import LogoutButton from "./LogoutButton"
+import { prisma } from "@/lib/prisma"
 
 export default async function Header() {
   const session = await getServerSession(authOptions)
+
+  const currentUser = session?.user?.id
+    ? await prisma.user.findUnique({
+        where: {
+          id: Number(session.user.id),
+        },
+        select: {
+          name: true,
+        },
+      })
+    : null
 
   return (
     <div className="mb-8">
@@ -27,17 +39,15 @@ export default async function Header() {
                 className="flex items-center gap-2 rounded-full px-3 py-2 hover:bg-gray-100 transition"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-sm font-bold text-white">
-                  {session.user.name?.slice(0, 1)}
+                  {currentUser?.name.slice(0, 1)}
                 </div>
 
-                <span className="font-medium text-black
-                ">
-                  {session.user.name}
+                <span className="font-medium text-black">
+                  {currentUser?.name}
                 </span>
               </Link>
 
               <LogoutButton />
-
             </>
           ) : (
             <>
