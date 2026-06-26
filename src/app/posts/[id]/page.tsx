@@ -67,6 +67,7 @@ export default async function PostDetailPage({ params }: Props) {
             select: {
               id: true,
               name: true,
+              username: true,
             },
           },
         },
@@ -190,9 +191,12 @@ export default async function PostDetailPage({ params }: Props) {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">
+                      <Link
+                        href={`/users/${comment.user.username}`}
+                        className="text-sm font-semibold text-gray-900 transition hover:text-orange-500"
+                      >
                         {comment.user.name}
-                      </p>
+                      </Link>
 
                       <p className="text-xs text-gray-500">
                         {comment.createdAt.toLocaleDateString("ja-JP")}
