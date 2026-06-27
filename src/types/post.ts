@@ -17,7 +17,7 @@ export type PostWithCounts = Post & {
   user: {
     id: number
     name: string
-    username: string | null
+    username: string
   }
   _count: {
     likes: number

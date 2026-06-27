@@ -5,13 +5,13 @@ import { notFound } from "next/navigation"
 import ReviewTargetTag from "@/components/ReviewTargetTag"
 import DeletePostButton from "./DeletePostButton"
 import Link from "next/link"
+import UserLink from "@/components/UserLink"
 import Image from "next/image"
 import NewPostButton from "@/components/NewPostButton"
 import LikeButton from "@/components/LikeButton"
 import BookmarkButton from "@/components/BookmarkButton"
 import CommentForm from "@/components/CommentForm"
 import CommentDeleteButton from "@/components/CommentDeleteButton"
-import { User } from "lucide-react"
 
 type Props = {
   params: Promise<{
@@ -94,15 +94,11 @@ export default async function PostDetailPage({ params }: Props) {
         <div><ReviewTargetTag reviewTarget={post.reviewTarget} /></div>
 
         {/* 投稿者 */}
-        {post.user.username && (
-          <Link
-            href={`/users/${post.user.username}`}
-            className="ml-auto inline-flex items-center gap-1 rounded-full bg-gray-100 mt-2 px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 transition"
-          >
-            <User size={12} />
-            {post.user.name}
-          </Link>
-        )}
+        <UserLink
+          username={post.user.username}
+          name={post.user.name}
+          className="mt-2"
+        />
 
         {/* 画像 */}
         {post.imageUrl && (
@@ -191,12 +187,11 @@ export default async function PostDetailPage({ params }: Props) {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <Link
-                        href={`/users/${comment.user.username}`}
-                        className="text-sm font-semibold text-gray-900 transition hover:text-orange-500"
-                      >
-                        {comment.user.name}
-                      </Link>
+                      <UserLink
+                        username={comment.user.username}
+                        name={comment.user.name}
+                        variant="text"
+                      />
 
                       <p className="text-xs text-gray-500">
                         {comment.createdAt.toLocaleDateString("ja-JP")}
