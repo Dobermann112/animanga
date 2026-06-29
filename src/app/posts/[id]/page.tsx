@@ -11,7 +11,7 @@ import NewPostButton from "@/components/NewPostButton"
 import LikeButton from "@/components/LikeButton"
 import BookmarkButton from "@/components/BookmarkButton"
 import CommentForm from "@/components/CommentForm"
-import CommentDeleteButton from "@/components/CommentDeleteButton"
+import CommentList from "@/components/CommentList"
 
 type Props = {
   params: Promise<{
@@ -174,45 +174,11 @@ export default async function PostDetailPage({ params }: Props) {
             </p>
           )}
 
-          {post.comments.length === 0 ? (
-            <p className="mt-4 text-sm text-gray-500">
-              まだコメントがありません。
-            </p>
-          ) : (
-            <div className="mt-6 space-y-4">
-              {post.comments.map((comment) => (
-                <div
-                  key={comment.id}
-                  className="rounded-xl border border-gray-100 bg-gray-50 p-4"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <UserLink
-                        username={comment.user.username}
-                        name={comment.user.name}
-                        variant="text"
-                      />
-
-                      <p className="text-xs text-gray-500">
-                        {comment.createdAt.toLocaleDateString("ja-JP")}
-                      </p>
-                    </div>
-
-                    {comment.userId === Number(session?.user?.id) && (
-                      <CommentDeleteButton
-                        postId={post.id}
-                        commentId={comment.id}
-                      />
-                    )}
-                  </div>
-
-                  <p className="mt-3 text-sm leading-relaxed text-gray-700">
-                    {comment.content}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
+          <CommentList
+            comments={post.comments}
+            postId={post.id}
+            currentUserId={session?.user?.id ? Number(session.user.id) : null}
+          />
         </section>
 
       <NewPostButton isLoggedIn={!!session?.user} />
