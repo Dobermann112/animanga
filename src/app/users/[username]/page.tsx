@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { postCardInclude } from "@/lib/postQuery"
 import { redirect, notFound } from "next/navigation"
 import PostCard from "@/components/PostCard"
 import Pagination from "@/components/Pagination"
@@ -45,6 +46,8 @@ export default async function UserDetailPage({ params, searchParams }: Props) {
   const session = await getServerSession(authOptions)
   const currentUserId = session?.user?.id ? Number(session.user.id) : null
 
+  const postViewerId = currentUserId ?? -1
+
   if (currentUserId === user.id) {
     redirect("/mypage")
   }
@@ -56,32 +59,7 @@ export default async function UserDetailPage({ params, searchParams }: Props) {
 
   const posts = await prisma.post.findMany({
     where: postWhere,
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          username: true,
-        },
-      },
-      _count: {
-        select: {
-          likes: true,
-          bookmarks: true,
-          comments: true,
-        },
-      },
-      likes: {
-        where: {
-          userId: currentUserId ?? -1,
-        },
-      },
-      bookmarks: {
-        where: {
-          userId: currentUserId ?? -1,
-        },
-      },
-    },
+    include: postCardInclude(postViewerId),
     orderBy: {
       createdAt: "desc",
     },

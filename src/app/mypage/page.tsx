@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { postCardInclude } from "@/lib/postQuery"
 import Link from "next/link"
 import Pagination from "@/components/Pagination"
 import PostCard from "@/components/PostCard"
@@ -83,32 +84,7 @@ export default async function MyPage({ searchParams }: MyPageProps) {
 
   const posts = await prisma.post.findMany({
     where: postWhere,
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          username: true,
-        },
-      },
-      _count: {
-        select: {
-          likes: true,
-          bookmarks: true,
-          comments: true,
-        },
-      },
-      likes: {
-        where: {
-          userId,
-        },
-      },
-      bookmarks: {
-        where: {
-          userId,
-        },
-      },
-    },
+    include: postCardInclude(userId),
     orderBy: {
       createdAt: "desc"
     },
