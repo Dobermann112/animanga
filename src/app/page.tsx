@@ -5,6 +5,7 @@ import PostCard from "@/components/PostCard"
 import NewPostButton from "@/components/NewPostButton"
 import PostListControls from "@/components/PostListControls"
 import { prisma } from "@/lib/prisma"
+import { postCardInclude } from "@/lib/postQuery"
 import { PostWithCounts } from "@/types/post"
 import { ReviewTarget } from "@prisma/client"
 import TargetFilter from "@/components/TargetFilter"
@@ -79,32 +80,7 @@ export default async function Home({ searchParams }: Props) {
 
   const posts: PostWithCounts[] = await prisma.post.findMany({
     where,
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          username: true,
-        },
-      },
-      _count: {
-        select: {
-          likes: true,
-          bookmarks: true,
-          comments: true,
-        },
-      },
-      likes: {
-        where: {
-          userId,
-        },
-      },
-      bookmarks: {
-        where: {
-          userId,
-        },
-      },
-    },
+    include: postCardInclude(userId),
     orderBy: isPopularSort
       ? {
           likes: {

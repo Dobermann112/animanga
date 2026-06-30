@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { postCardInclude, postUserSelect } from "@/lib/postQuery"
 import { notFound } from "next/navigation"
 import ReviewTargetTag from "@/components/ReviewTargetTag"
 import DeletePostButton from "./DeletePostButton"
@@ -37,38 +38,11 @@ export default async function PostDetailPage({ params }: Props) {
       id: postId,
     },
     include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          username: true,
-        },
-      },
-      _count: {
-        select: {
-          likes: true,
-          bookmarks: true,
-          comments: true,
-        },
-      },
-      likes: {
-        where: {
-          userId
-        },
-      },
-      bookmarks: {
-        where: {
-          userId
-        },
-      },
+      ...postCardInclude(userId),
       comments: {
         include: {
           user: {
-            select: {
-              id: true,
-              name: true,
-              username: true,
-            },
+            select: postUserSelect,
           },
         },
         orderBy: {
