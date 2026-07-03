@@ -5,6 +5,7 @@ import { postCardInclude } from "@/lib/postQuery"
 import { redirect, notFound } from "next/navigation"
 import PostCard from "@/components/PostCard"
 import Pagination from "@/components/Pagination"
+import FollowButton from "@/components/FollowButton"
 
 type Props = {
   params: Promise<{
@@ -52,6 +53,17 @@ export default async function UserDetailPage({ params, searchParams }: Props) {
     redirect("/mypage")
   }
 
+  const isFollowing = currentUserId
+    ? !!(await prisma.follow.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: currentUserId,
+            followingId: user.id,
+          },
+        },
+      }))
+    : false
+
   const postWhere = { userId: user.id }
   const totalCount = await prisma.post.count({ where: postWhere })
 
@@ -75,10 +87,16 @@ export default async function UserDetailPage({ params, searchParams }: Props) {
             {user.name.slice(0, 1)}
           </div>
 
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {user.name}
-            </h1>
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold text-gray-900">
+                {user.name}
+              </h1>
+
+              {currentUserId && (
+                <FollowButton username={username} initialIsFollowing={isFollowing} />
+              )}
+            </div>
 
             <p className="mt-1 text-sm text-gray-500">
               投稿 {user._count.posts}

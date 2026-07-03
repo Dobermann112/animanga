@@ -28,7 +28,7 @@ export default async function MyPage({ searchParams }: MyPageProps) {
 
   const params = await searchParams
   const currentTab =
-    params.tab === "liked" || params.tab === "saved" || params.tab === "posts"
+    params.tab === "liked" || params.tab === "saved" || params.tab === "posts" || params.tab === "following"
       ? params.tab
       : "posts"
 
@@ -46,6 +46,7 @@ export default async function MyPage({ searchParams }: MyPageProps) {
           posts: true,
           likes: true,
           bookmarks: true,
+          followers: true,
         },
       },
     },
@@ -54,6 +55,25 @@ export default async function MyPage({ searchParams }: MyPageProps) {
   if (!user) {
     redirect("/login")
   }
+
+  const followingUsers =
+    currentTab === "following"
+      ? await prisma.follow.findMany({
+          where: { followerId: userId },
+          include: {
+            following: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                bio: true,
+                _count: { select: { posts: true } },
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        })
+      : []
 
   const postWhere =
     currentTab === "liked"
@@ -76,13 +96,13 @@ export default async function MyPage({ searchParams }: MyPageProps) {
             userId,
           }
 
-  const totalCount = await prisma.post.count({
+  const totalCount = currentTab === "following" ? 0 : await prisma.post.count({
     where: postWhere,
   })
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
-  const posts = await prisma.post.findMany({
+  const posts = currentTab === "following" ? [] : await prisma.post.findMany({
     where: postWhere,
     include: postCardInclude(userId),
     orderBy: {
@@ -161,14 +181,56 @@ export default async function MyPage({ searchParams }: MyPageProps) {
         >
           保存 {user._count.bookmarks}
         </Link>
+
+        <Link
+          href="/mypage?tab=following"
+          className={`rounded-full border px-4 py-2 font-medium ${
+            currentTab === "following"
+              ? "bg-black text-white"
+              : "bg-white text-black"
+          }`}
+        >
+          フォロー {user._count.followers}
+        </Link>
       </div>
 
       <div className="mt-8">
         <h2 className="mb-4 text-xl font-bold">
-          {currentTab === "liked" ? "いいねした投稿" : currentTab === "saved" ? "保存した投稿" : "自分の投稿"}
+          {currentTab === "liked"
+            ? "いいねした投稿"
+            : currentTab === "saved"
+              ? "保存した投稿"
+              : currentTab === "following"
+                ? "フォロー中のユーザー"
+                : "自分の投稿"}
         </h2>
 
-        {posts.length === 0 ? (
+        {currentTab === "following" ? (
+          followingUsers.length === 0 ? (
+            <p className="text-gray-600">まだフォローしているユーザーはいません</p>
+          ) : (
+            <div className="space-y-3">
+              {followingUsers.map(({ following: u }) => (
+                <Link
+                  key={u.id}
+                  href={`/users/${u.username}`}
+                  className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:bg-gray-50"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-bold text-white">
+                    {u.name.slice(0, 1)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-gray-900">{u.name}</p>
+                    <p className="text-xs text-gray-500">投稿 {u._count.posts}</p>
+                    {u.bio && (
+                      <p className="mt-1 truncate text-sm text-gray-600">{u.bio}</p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )
+        ) : posts.length === 0 ? (
           <p className="text-gray-600">
             {currentTab === "liked" ? "まだいいねした投稿がありません" : currentTab === "saved" ? "まだ保存した投稿がありません" : "まだ投稿がありません"}
           </p>
