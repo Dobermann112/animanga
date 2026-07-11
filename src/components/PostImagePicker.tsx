@@ -176,7 +176,7 @@ export default function PostImagePicker({
 
       {/* 作品検索 */}
       <div className="mt-3 border rounded p-3">
-        <p className="text-sm text-gray-800">外部API作品検索(AniList)</p>
+        <p className="text-sm text-gray-800">作品検索</p>
 
         {reviewTarget === "BOTH" && (
           <div className="flex gap-2 mt-2">
