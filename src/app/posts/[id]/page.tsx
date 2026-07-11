@@ -76,13 +76,18 @@ export default async function PostDetailPage({ params }: Props) {
 
         {/* 画像 */}
         {post.imageUrl && (
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            width={800}
-            height={400}
-            className="w-full h-48 object-cover rounded mt-3"
-          />
+          <div className="mt-3">
+            <Image
+              src={post.imageUrl}
+              alt={post.title}
+              width={800}
+              height={1200}
+              className="w-full h-auto max-h-[70vh] object-contain rounded"
+            />
+            {post.imageSource === "ANILIST" && (
+              <p className="text-xs text-gray-400 mt-1">画像提供: AniList</p>
+            )}
+          </div>
         )}
 
         {/* タイトル */}

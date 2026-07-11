@@ -44,7 +44,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     const body = await request.json()
 
-    const { title, imageUrl, description, review, rating, reviewTarget } = body
+    const { title, imageUrl, imageSource, description, review, rating, reviewTarget } = body
 
     // バリデーション
     if (!title || !description || !reviewTarget) {
@@ -67,6 +67,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       data: {
         title,
         imageUrl,
+        imageSource,
         description,
         review,
         rating,

@@ -30,6 +30,7 @@ model Post {
   user          User    @relation(fields: [userId], references: [id])
   title         String
   imageUrl      String?
+  imageSource   String?
   description   String
   review        String?
   rating        Int

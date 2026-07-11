@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
 
-    const { title, imageUrl, description, review, rating, reviewTarget } = body
+    const { title, imageUrl, imageSource, description, review, rating, reviewTarget } = body
 
     const session = await getServerSession(authOptions)
 
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
       data: {
         title,
         imageUrl,
+        imageSource,
         description,
         review,
         rating,
