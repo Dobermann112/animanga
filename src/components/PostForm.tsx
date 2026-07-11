@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import type { PostFormValues } from "@/types/postForm"
+import PostImagePicker from "@/components/PostImagePicker"
 
 type Props = {
   title: string
@@ -64,19 +65,13 @@ export default function PostForm({
           />
         </div>
 
-        <div className="mt-4">
-          <label htmlFor="imageUrl" className="text-sm text-gray-800">
-            画像URL
-          </label>
-          <input
-            id="imageUrl"
-            type="text"
-            placeholder="画像URLを入力"
-            className="w-full border rounded px-3 py-2 mt-1 text-black placeholder:text-gray-400"
-            value={formValues.imageUrl}
-            onChange={(e) => handleChange("imageUrl", e.target.value)}
-          />
-        </div>
+        <PostImagePicker
+          value={formValues.image}
+          onChange={(next) => handleChange("image", next)}
+          reviewTarget={formValues.reviewTarget}
+          onExternalSelectTitle={(t) => handleChange("title", t)}
+          disabled={loading}
+        />
 
         <div className="mt-4">
           <label htmlFor="rating" className="text-sm text-gray-800">
