@@ -1,6 +1,5 @@
 import type { PostWithCounts } from "@/types/post"
 import ReviewTargetTag from "./ReviewTargetTag"
-import Image from "next/image"
 import Link from "next/link"
 import UserLink from "./UserLink"
 import LikeButton from "./LikeButton"
@@ -20,17 +19,6 @@ export default function PostCard({ post }: Props) {
       <Link href={`/posts/${post.id}`} className="block">
         {/* タグ */}
         <div><ReviewTargetTag reviewTarget={post.reviewTarget} /></div>
-
-        {/* 画像 */}
-        {post.imageUrl && (
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            width={800}
-            height={400}
-            className="w-full h-48 object-cover rounded mt-3"
-          />
-        )}
 
         {/* タイトル */}
         <p className="font-bold text-lg mt-3 text-gray-800">

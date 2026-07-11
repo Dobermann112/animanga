@@ -5,6 +5,7 @@ export type Post = {
   userId: number
   title: string
   imageUrl: string | null
+  imageSource: string | null
   description: string
   review: string | null
   rating: number
